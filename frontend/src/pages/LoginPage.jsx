@@ -51,7 +51,7 @@ export default function LoginPage() {
           <div className="facaCadastro">
             <h1>Não tem uma conta?</h1>
             <p>
-              Faça parte da mudança. Encontre e apoie ONGs que transformam vidas todos os dias</p>
+              Faça parte da mudança. Encontre e apoie ONGs que transformam vidas todos os dias!</p>
             <button onClick={toggleFormMode}>Cadastre-se</button>
           </div>
         </div>
