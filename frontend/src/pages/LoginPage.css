@@ -41,6 +41,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    max-width: 300px;
 }
 
 form
@@ -178,4 +179,54 @@ h1
 button[type="submit"]
 {
     color: #000;
+}
+
+@media screen and (max-width: 768px) {
+    .card {
+        width: 90%;
+        flex-direction: column;
+        justify-content: center;
+        gap: 25px;
+    }
+
+    .esquerda, .direita {
+        width: 100%;
+        height: auto;
+    }
+
+    .esquerda.secaoAtiva .facaLogin,
+    .direita.secaoAtiva .facaCadastro {
+        display: none;
+    }
+
+    .esquerda:not(.secaoAtiva) .formLogin,
+    .direita:not(.secaoAtiva) .formCadastro {
+        display: none;
+    }
+
+    .facaLogin, .facaCadastro {
+        position: static;
+    }
+
+    .facaLogin p, .facaCadastro p {
+        display: none;
+    }
+
+    .facaLogin h1, .facaCadastro h1 {
+        font-size: 16px;
+        margin: 0;
+    }
+
+    .formLogin, .formCadastro {
+        width: 80%;
+    }
+
+    .secaoAtiva {
+        order: -1;
+    }
+    
+    .card::after
+    {
+        display: none;
+    }
 }

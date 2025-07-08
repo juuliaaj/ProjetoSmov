@@ -21,7 +21,7 @@ export default function LoginPage() {
   return (
     <section className="containerPrincipal">
       <div className={`card ${activeForm === "login" ? "loginActive" : "cadastroActive"}`}>
-        <div className="esquerda">
+        <div className={`esquerda ${activeForm === "login" ? "secaoAtiva" : ""}`}>
           <div className="formLogin">
             <img className="logo" src="/img/logoSmov.png" alt="Logo Smov" />
             <form onSubmit={handleLogin}>
@@ -37,7 +37,7 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="direita">
+        <div className={`direita ${activeForm === "cadastro" ? "secaoAtiva" : ""}`}>
           <div className="formCadastro">
             <img className="logo" src="/img/logoSmov.png" alt="Logo Smov" />
             <form onSubmit={handleCadastro}>
