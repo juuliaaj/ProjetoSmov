@@ -1,0 +1,124 @@
+/* Hero */
+.hero {
+    background-color: #5f79f4;
+    color: white;
+    text-align: center;
+    padding: 0 20px;
+    display: flex;
+    align-items: center;
+}
+
+.hero_image {
+    position: relative;
+    flex: 1;
+    height: 400px;
+    overflow: hidden;
+    margin-top: -5%;
+}
+
+.hero_image img {
+    left: 50%;
+    transform: translateX(-50%);
+    margin: 0 auto;
+    bottom: -20%;
+    height: 100%;
+    position: absolute;
+    object-fit: cover;
+}
+
+.hero_text {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero_text h1 {
+    font-size: 64px;
+    font-weight: bolder;
+    margin-bottom: 10px;
+}
+
+.hero_text p {
+    font-size: 18px;
+}
+
+.como_doar {
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.como_doar h2 {
+    font-size: 24px;
+    margin-bottom: 30px;
+}
+
+.doar_opcoes {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-bottom: 30px;
+}
+
+.opcao {
+    font-size: 14px;
+    min-width: 110px;
+}
+
+.opcao p {
+    text-align: center;
+}
+
+.botao_ong {
+    background-color: #a288f4;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.botao_ong:hover {
+    background-color: #6c5ce7;
+}
+
+.mensagem {
+    padding: 40px 20px;
+    text-align: center;
+    font-size: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+@media (max-width: 860px) {
+    .hero_text {
+        width: 100%;
+        text-align: center;
+    }
+
+    .hero {
+        height: 250px;
+    }
+
+    .hero_text h1 {
+        font-size: 24px;
+    }
+
+    .hero_text p {
+        font-size: 12px;
+    }
+
+    .hero_image {
+        display: none;
+    }
+
+    .doar_opcoes {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
