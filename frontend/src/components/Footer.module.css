@@ -2,15 +2,20 @@
     background-color: #191B25;
     color: white;
     display: grid;
-    grid-template-columns: 1fr 1fr 50px;
+    grid-template-columns: 1fr 1fr 1fr;
     align-items: center;
     padding: 10px;
     font-size: 14px;
     gap: 10px;
 }
 
+.footer div {
+    text-align: center;
+}
+
 @media screen and (max-width: 860px) {
     .footer {
         font-size: 12px;
+        grid-template-columns: 1fr 1fr 50px;
     }
 }
