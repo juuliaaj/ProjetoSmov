@@ -1,22 +1,107 @@
 import { useState } from "react";
 import "./LoginPage.css";
+import { toast, ToastContainer } from "react-toastify";
+import fetcher from "../utils/fetcher";
+import { TOAST_CONFIG } from "../utils/toast";
 
 export default function LoginPage() {
+  const [loading, setLoading] = useState(false);
   const [activeForm, setActiveForm] = useState("cadastro");
+  const [values, setValues] = useState({
+    name: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
+  });
 
-  const toggleFormMode = () => setActiveForm((prev) => (prev === "login" ? "cadastro" : "login"));
+  const handleChangeValues = (event) => {
+    setValues((prevValues) => ({
+      ...prevValues,
+      [event.target.name]: event.target.value,
+    }));
+  };
 
-  const handleLogin = (e) => {
-    // Implementar lógica de login aqui
+  const toggleFormMode = () => {
+
+    setActiveForm((prev) => (prev === "login" ? "cadastro" : "login"));
+
+    setValues({
+      name: "",
+      email: "",
+      password: "",
+      passwordConfirm: "",
+    });
+  };
+
+  const handleLogin = async (e) => {
     e.preventDefault();
-    alert("Login enviado");
+    setLoading(true);
+
+    const notify = toast.loading("Aguarde um momento...", TOAST_CONFIG);
+
+    try {
+      const response = await fetcher.post('/auth/login', {
+        email: values.email,
+        senha: values.password
+      });
+
+      if (response.status === 200) {
+        toast.update(notify, { render: "Pronto!", type: "success", isLoading: false });
+        window.localStorage.setItem('user', JSON.stringify(response.data.user));
+        window.location.href = '/';
+      } else {
+        toast.update(notify, { render: "Erro ao fazer login. Verifique suas credenciais e tente novamente.", type: "error", isLoading: false });
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.update(notify, { render: "Erro ao fazer login. Verifique suas credenciais e tente novamente.", type: "error", isLoading: false });
+    } finally {
+      setLoading(false);
+    }
   }
 
-  const handleCadastro = (e) => {
-    // Implementar lógica de cadastro aqui
+  const handleCadastro = async (e) => {
     e.preventDefault();
-    alert("Cadastro enviado");
-  }
+
+    if (values.password !== values.passwordConfirm) {
+      toast.error("As senhas não se coincidem.", TOAST_CONFIG);
+
+      return;
+    }
+
+    if (values.password.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres.", TOAST_CONFIG);
+
+      return;
+    }
+
+    const notify = toast.loading("Aguarde um momento...", TOAST_CONFIG);
+
+    setLoading(true);
+
+    try {
+      const response = await fetcher.post('/auth/cadastro', {
+        email: values.email,
+        senha: values.password,
+        nome: values.name
+      });
+
+      if (response.status === 201) {
+        toast.update(notify, { render: "Pronto!", type: "success", isLoading: false });
+        window.localStorage.setItem('user', JSON.stringify(response.data.user));
+        window.location.href = '/';
+      } else {
+        toast.update(notify, { render: "Erro ao fazer cadastro. Tente novamente mais tarde.", type: "error", isLoading: false });
+      }
+    } catch (error) {
+      console.error(error);
+
+      toast.update(notify, { render: "Erro ao fazer cadastro. Tente novamente mais tarde.", type: "error", isLoading: false });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <section className="containerPrincipal">
@@ -25,9 +110,9 @@ export default function LoginPage() {
           <div className="formLogin">
             <img className="logo" src="/img/logoSmov.png" alt="Logo Smov" />
             <form onSubmit={handleLogin}>
-              <input type="email" placeholder="E-mail" required />
-              <input type="password" placeholder="Senha" required />
-              <button type="submit">Entrar</button>
+              <input type="email" onChange={handleChangeValues} value={values.email} name="email" placeholder="E-mail" required />
+              <input type="password" onChange={handleChangeValues} value={values.password} name="password" placeholder="Senha" required />
+              <button type="submit" disabled={loading}>Entrar</button>
             </form>
           </div>
           <div className="facaLogin">
@@ -41,11 +126,11 @@ export default function LoginPage() {
           <div className="formCadastro">
             <img className="logo" src="/img/logoSmov.png" alt="Logo Smov" />
             <form onSubmit={handleCadastro}>
-              <input type="text" placeholder="Nome" required />
-              <input type="email" placeholder="E-mail" required />
-              <input type="password" placeholder="Senha" required />
-              <input type="password" placeholder="Confira sua Senha" required />
-              <button type="submit">Cadastrar</button>
+              <input type="text" onChange={handleChangeValues} value={values.name} name="name" placeholder="Nome" required />
+              <input type="email" onChange={handleChangeValues} value={values.email} name="email" placeholder="E-mail" required />
+              <input type="password" onChange={handleChangeValues} value={values.password} name="password" placeholder="Senha" required />
+              <input type="password" onChange={handleChangeValues} value={values.passwordConfirm} name="passwordConfirm" placeholder="Confira sua Senha" required />
+              <button type="submit" disabled={loading}>Cadastrar</button>
             </form>
           </div>
           <div className="facaCadastro">
@@ -56,6 +141,8 @@ export default function LoginPage() {
           </div>
         </div>
       </div>
+
+      <ToastContainer />
     </section>
   );
 }
