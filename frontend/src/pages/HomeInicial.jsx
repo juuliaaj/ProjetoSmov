@@ -23,15 +23,18 @@ const HomeInicial = () => {
             <section className={styles.conheca_smov}>
                 <h2>Conheça o SMOV</h2>
                 <p>
-                    O SMOV - Sistema de Mapeamento de ONGs de Vida de Bom Jesus é uma iniciativa inovadora 
-                    desenvolvida para revolucionar a forma de voluntariado e engajamento em organizações 
-                    não-governamentais na cidade de Bom Jesus - PI.
+                    O SMOV - Sistema de Mapeamento de ONGs do Vale dos Sinos é uma iniciativa inovadora 
+                    que busca transformar a forma como a população se conecta com organizações não-governamentais da 
+                    região do Vale dos Sinos–RS. A proposta surgiu com o objetivo de facilitar o acesso à 
+                    informação e incentivar o engajamento voluntário de forma prática, segura e eficiente.
+
+
                 </p>
                 <p>
-                    O SMOV propõe a criação de um site interativo que facilite a localização dessas ONGs, 
-                    proporcionando informações sobre suas causas, atividades mais realizadas e horários de 
-                    funcionamento, com o objetivo de facilitar o engajamento de voluntários de forma mais 
-                    segura e efetiva.
+                    O SMOV oferece um site interativo que permite aos usuários localizar ONGs em diferentes cidades da
+                    região, visualizar no mapa onde estão situadas e obter detalhes como área de atuação, formas de contato,
+                    fotos e horários de funcionamento. Além disso, o sistema permite que voluntários façam reservas para visitas
+                    e que responsáveis por ONGs cadastrem suas instituições para ampliar sua visibilidade e impacto.
                 </p>
             </section>
 
