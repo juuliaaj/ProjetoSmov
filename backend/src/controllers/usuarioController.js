@@ -60,8 +60,6 @@ exports.login = async (req, res, next) => {
 
         if (!userData.length) throw new Error("Usuário não encontrado");
 
-        console.log(userData)
-
         const usuario = new Usuario(userData[0].id_usuario, userData[0].nome, userData[0].foto_perfil);
         
         res.cookie('smovSessionID', data.user.id, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true });
