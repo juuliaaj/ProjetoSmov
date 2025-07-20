@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import LoginPage from "./pages/LoginPage";
 import DonationPage from "./pages/DonationPage";
 import HomeInicial from './pages/HomeInicial';
+import Mapeamento from './pages/mapeamento';
 
 function App() {
   return (
@@ -9,6 +10,7 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/doacoes" element={<DonationPage />} />
       <Route path="/inicial" element={<HomeInicial />} />
+      <Route path="/mapa" element={<Mapeamento />} />
       {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>
   );

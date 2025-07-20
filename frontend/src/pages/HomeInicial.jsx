@@ -1,5 +1,5 @@
 import styles from "./HomeInicial.module.css";
-import { Heart, MapPin, Calendar, Shield, Building2, CheckCircle, Settings, Eye } from 'lucide-react';
+import { Heart, MapPin, Calendar, Shield, CheckCircle, Settings, Eye } from 'lucide-react';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
