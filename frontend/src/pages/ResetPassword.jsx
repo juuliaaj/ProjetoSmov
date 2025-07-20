@@ -5,6 +5,8 @@ import styles from "./ResetPassword.module.css";
 import supabase from "../utils/supabase";
 import { TOAST_CONFIG } from "../utils/toast";
 
+import Logo from "../components/Logo";
+
 export default function ResetPasswordPage() {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
@@ -71,7 +73,7 @@ export default function ResetPasswordPage() {
   return (
     <section className={styles.containerPrincipal}>
       <div className={styles.card}>
-        <img className={styles.logo} src="/img/logoSmov.png" alt="Logo Smov" />
+        <Logo />
         <h1>Redefinir Senha</h1>
         <p>Insira sua nova senha abaixo para redefinir o acesso à sua conta.</p>
         <form onSubmit={handleSubmit} className={styles.form}>

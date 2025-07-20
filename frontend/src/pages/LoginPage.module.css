@@ -159,9 +159,10 @@
     transform: translateX(-50%);
 }
 
-.buttonSubmit
-{
-    color: #000;
+.esqueceuSenha {
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
 }
 
 @media screen and (max-width: 768px) {

@@ -4,6 +4,8 @@ import fetcher from "../utils/fetcher";
 import { TOAST_CONFIG } from "../utils/toast";
 import styles from "./RecoverPassword.module.css";
 
+import Logo from "../components/Logo";
+
 export default function RecoverPassword() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,7 @@ export default function RecoverPassword() {
     <section className={styles.containerPrincipal}>
       <div className={styles.card}>
         <div className={styles.formRecover}>
-          <img className={styles.logo} src="/img/logoSmov.png" alt="Logo Smov" />
+          <Logo />
           <h1 className={styles.title}>Recuperar Senha</h1>
           <p className={styles.text}>
             Digite seu e-mail para receber as instruções de recuperação de senha.

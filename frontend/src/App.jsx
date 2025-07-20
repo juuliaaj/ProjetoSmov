@@ -14,7 +14,7 @@ function App() {
       <Route path="/recuperar" element={<RecoverPassword />} />
       <Route path="/resetar" element={<ResetPassword />} />
       <Route path="/doacoes" element={<DonationPage />} />
-      <Route path="/mapa" element={<Mapeamento />} />
+      <Route path="/mapeamento" element={<Mapeamento />} />
 
       {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>

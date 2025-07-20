@@ -117,7 +117,7 @@ export default function LoginPage() {
               <input className={styles.input} onChange={handleChangeValues} value={values.email} name="email" type="email" placeholder="E-mail" required />
               <input className={styles.input} onChange={handleChangeValues} value={values.password} name="password"  type="password" placeholder="Senha" required />
               <button className={`${styles.buttonSubmit} ${styles.button}`} type="submit" disabled={loading}>Entrar</button>
-              <Link to="/recuperar">Esqueceu a senha?</Link> 
+              <Link to="/recuperar" className={styles.esqueceuSenha}>Esqueceu a senha?</Link> 
             </form>
           </div>
           <div className={styles.facaLogin}>
