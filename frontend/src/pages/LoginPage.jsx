@@ -3,6 +3,7 @@ import "./LoginPage.css";
 import { toast, ToastContainer } from "react-toastify";
 import fetcher from "../utils/fetcher";
 import { TOAST_CONFIG } from "../utils/toast";
+import { Link } from "react-router-dom";
 
 export default function LoginPage() {
   const [loading, setLoading] = useState(false);
@@ -113,6 +114,7 @@ export default function LoginPage() {
               <input type="email" onChange={handleChangeValues} value={values.email} name="email" placeholder="E-mail" required />
               <input type="password" onChange={handleChangeValues} value={values.password} name="password" placeholder="Senha" required />
               <button type="submit" disabled={loading}>Entrar</button>
+              <Link to="/recuperar">Esqueceu a senha?</Link> 
             </form>
           </div>
           <div className="facaLogin">
