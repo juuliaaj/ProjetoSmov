@@ -134,7 +134,7 @@ export default function LoginPage() {
               <input className={styles.input} onChange={handleChangeValues} value={values.name} name="name" type="text" placeholder="Nome" required />
               <input className={styles.input} onChange={handleChangeValues} value={values.email} name="email" type="email" placeholder="E-mail" required />
               <input className={styles.input} onChange={handleChangeValues} value={values.password} name="password" type="password" placeholder="Senha" required />
-              <input className={styles.input} onChange={handleChangeValues} value={values.passwordConfirm} name="confirmPassword" type="password" placeholder="Confirme sua Senha" required />
+              <input className={styles.input} onChange={handleChangeValues} value={values.passwordConfirm} name="passwordConfirm" type="password" placeholder="Confirme sua Senha" required />
               <button className={`${styles.buttonSubmit} ${styles.button}`} type="submit" disabled={loading}>Cadastrar</button>
             </form>
           </div>
