@@ -74,7 +74,7 @@ const HomeInicial = () => {
         </p>
         <p>
           O SMOV propõe a criação de um site interativo onde os usuários poderão acessar facilmente
-          informações sobre as instituições, promover iniciativas sociais e divulgar seus projetos,
+          informações sobre as organizações, promover iniciativas sociais e divulgar seus projetos,
           trabalhos e necessidades. A tecnologia será uma aliada na conexão entre pessoas e causas importantes.
         </p>
       </section>
@@ -100,7 +100,6 @@ const HomeInicial = () => {
     </ul>
   </div>
 </section>
-
 
       <section className={styles.apoie_ongs}>
         <div className={styles.grid}>
