@@ -1,0 +1,78 @@
+.mapeamento {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.mapaWrapper {
+  position: relative;
+  width: 100%;
+  height: calc(100vh - 160px); /* altura total menos header e footer */
+  z-index: 0;
+}
+
+.mapa {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.overlay {
+  position: absolute;
+  top: 10px;
+  left: 50px;
+  z-index: 1000;
+  background-color: white;
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input {
+  padding: 10px;
+  width: 300px;
+  border: 1px solid black;
+  border-radius: 6px;
+  font-size: 15px;
+  background-color: white;
+  color: black;
+}
+
+
+.botao {
+  padding: 10px 18px;
+  background-color: #2c3e50;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.botao:hover {
+  background-color: #1a252f;
+}
+
+/* Responsivo */
+@media (max-width: 600px) {
+  .input {
+    width: 220px;
+    font-size: 14px;
+  }
+
+  .botao {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .overlay {
+    top: 10px;
+    left: 10px;
+    padding: 10px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
