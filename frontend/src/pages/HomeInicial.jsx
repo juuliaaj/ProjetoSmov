@@ -1,131 +1,131 @@
-import styles from "./HomeInicial.module.css";
-import { Heart, MapPin, Calendar, Shield, CheckCircle, Settings, Eye } from 'lucide-react';
+import { useState, useEffect } from "react";
+import styles from "./HomeInicial.module.css;
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const HomeInicial = () => {
-    return (
-        <div className={styles.homeInicial}>
-            <Header />
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-            <section className={styles.hero}>
-                <div className={styles.hero_content}>
-                    <h1>Bem-vindo ao <br />
-                        <img src="/img/logoSmov.png" alt="Logo SMOV" className={styles.logo} />
-                  </h1>
+  // Detecta login com base no localStorage
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-                    <p>
-                        Seja parte dessa nossa rede de amor e cuidado!
-                    </p>
-                </div>
-            </section>
+  // Efeito para verificar o login ao carregar a página
+  useEffect(() => {
+    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
+    setIsLoggedIn(loggedIn);
+  }, []);
 
-            <section className={styles.conheca_smov}>
-                <h2>Conheça o SMOV</h2>
-                <p>
-                    O SMOV - Sistema de Mapeamento de ONGs do Vale dos Sinos é uma iniciativa inovadora 
-                    que busca transformar a forma como a população se conecta com organizações não-governamentais da 
-                    região do Vale dos Sinos–RS. A proposta surgiu com o objetivo de facilitar o acesso à 
-                    informação e incentivar o engajamento voluntário de forma prática, segura e eficiente.
+  const images = [
+    "/img/doacao.jpg",
+    "/img/educacao.jpg",
+    "/img/saude.jpg"
+  ];
 
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % images.length);
+  };
 
-                </p>
-                <p>
-                    O SMOV oferece um site interativo que permite aos usuários localizar ONGs em diferentes cidades da
-                    região, visualizar no mapa onde estão situadas e obter detalhes como área de atuação, formas de contato,
-                    fotos e horários de funcionamento. Além disso, o sistema permite que voluntários façam reservas para visitas
-                    e que responsáveis por ONGs cadastrem suas instituições para ampliar sua visibilidade e impacto.
-                </p>
-            </section>
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  };
 
-            <section className={styles.funcionalidades}>
-                <div className={styles.funcionalidades_list}>
-                    <div className={styles.list_item}>
-                        <div className={styles.item_content}>
-                            <h3>Para Voluntários</h3>
-                            <p>
-                                Se você tem vontade de fazer a diferença, nossa plataforma é o lugar ideal para começar. Encontre 
-                                ONGs verificadas na sua cidade e contribua de forma segura e efetiva.
-                            </p>
-                        </div>
-                    </div>
+  return (
+    <div className={styles.homeInicial}>
+      <Header isLoggedIn={isLoggedIn} />
 
-                    <div className={styles.list_item}>
-                        <MapPin className={styles.map_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Busca Inteligente por Localização</h2>
-                            <p>
-                                Digite sua cidade e descubra todas as ONGs verificadas da região no mapa interativo.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_item}>
-                        <Calendar className={styles.calendar_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Sistema de Reservas</h2>
-                            <p>
-                                Agende visitas, atividades de voluntariado ou participação em eventos diretamente 
-                                pela plataforma.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_item}>
-                        <Shield className={styles.shield_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Doações Seguras</h2>
-                            <p>
-                                Faça contribuições financeiras com total segurança através de nosso sistema integrado.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_section}>
-                        <div className={styles.section_content}>
-                            <h3>Para ONGs</h3>
-                            <p>
-                                Se você representa uma organização não governamental, nossa plataforma oferece visibilidade 
-                                nacional e ferramentas profissionais para conectar-se com voluntários e doadores.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_item}>
-                        <CheckCircle className={styles.check_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Verificação Confiável</h2>
-                            <p>
-                                Processo rigoroso que garante credibilidade e confiança para sua organização.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_item}>
-                        <Settings className={styles.settings_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Perfil Personalizado</h2>
-                            <p>
-                                Crie um perfil completo como um blog, conte sua história e mostre seu impacto.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className={styles.list_item}>
-                        <Eye className={styles.eye_icon} />
-                        <div className={styles.item_content}>
-                            <h2>Visibilidade Nacional</h2>
-                            <p>
-                                Apareça no mapa para milhares de pessoas que querem ajudar na sua região.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <Footer />
+      <section className={styles.hero}>
+        <div className={styles.hero_content}>
+          <h1>
+            Bem-vindo ao <br />
+            <img src="/img/logoSmov.png" alt="Logo SMOV" className={styles.logo} />
+          </h1>
+          <p>Seja parte dessa nossa rede de amor e cuidado!</p>
         </div>
-    );
+      </section>
+
+      {!isLoggedIn ? (
+        <section className={styles.carousel_section}>
+          <div className={styles.carousel_container}>
+            <img
+              src={images[currentSlide]}
+              alt={`Slide ${currentSlide + 1}`}
+              className={styles.carousel_image}
+              onMouseEnter={nextSlide}
+            />
+            <button className={styles.prev} onClick={prevSlide}>&#10094;</button>
+            <button className={styles.next} onClick={nextSlide}>&#10095;</button>
+            <div className={styles.overlay_text}>
+              <h2>Voluntários em ação</h2>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <div style={{ textAlign: "center", margin: "40px 0" }}>
+          <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
+        </div>
+      )}
+
+      <section className={styles.sobre}>
+        <h2>Conheça o SMOV</h2>
+        <p>
+          O SMOV - Sistema de Mapeamento de ONGs do Vale do Sinos é uma iniciativa inovadora
+          desenvolvida para revolucionar a forma de visualização e engajamento com organizações não
+          governamentais da região.
+        </p>
+        <p>
+          O SMOV propõe a criação de um site interativo onde os usuários poderão acessar facilmente
+          informações sobre as instituições, promover iniciativas sociais e divulgar seus projetos,
+          trabalhos e necessidades. A tecnologia será uma aliada na conexão entre pessoas e causas importantes.
+        </p>
+      </section>
+
+      <section className={styles.beneficios}>
+  <div className={styles.cardBeneficio}>
+    <h3>👤 Para Voluntários</h3>
+    <p>Encontre ONGs verificadas, leia suas missões e contribua de forma segura e efetiva.</p>
+    <ul>
+      <li>🔍 Busca Inteligente por Localização</li>
+      <li>📅 Sistema de Reservas</li>
+      <li>💳 Doações Seguras</li>
+    </ul>
+  </div>
+
+  <div className={styles.cardBeneficio}>
+    <h3>📍 Para ONGs</h3>
+    <p>Aumente a visibilidade e desfrute de ferramentas para conectar-se com voluntários</p>
+    <ul>
+      <li>✅ Verificação Confiável</li>
+      <li>🧑‍💻 Gestão de Voluntário</li>
+      <li>🌍 Visibilidade Nacional</li>
+    </ul>
+  </div>
+</section>
+
+
+      <section className={styles.apoie_ongs}>
+        <div className={styles.grid}>
+          <div>
+            <img src="/img/criancas.jpg" alt="Crianças" />
+            <button>Apoie ONG de Crianças</button>
+          </div>
+          <div>
+            <img src="/img/animais.jpg" alt="Animais" />
+            <button>Apoie ONG de Animais</button>
+          </div>
+          <div>
+            <img src="/img/ambiental.jpg" alt="Ambiente" />
+            <button>Apoie ONGs Ambientais</button>
+          </div>
+          <div>
+            <img src="/img/saude.jpg" alt="Saúde" />
+            <button>Apoie ONG de Saúde</button>
+          </div>
+        </div>
+      </section>
+
+      <Footer />
+    </div>
+  );
 };
 
 export default HomeInicial;
