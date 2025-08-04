@@ -27,7 +27,7 @@ const Header = ({ isLoggedIn }) => {
                     {isLoggedIn && (
                         <>
                             <li><a href="/reservas">Reservas</a></li>
-                            <li><a href="/ongs">Ongs</a></li>
+                            <li><a href="/ongs">ONGs</a></li>
                             <li><a href="/doacoes">Doações</a></li>
                         </>
                     )}

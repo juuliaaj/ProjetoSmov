@@ -1,65 +1,54 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import styles from "./HomeInicial.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import usePermissions from "../hooks/usePermissions";
 
 const HomeInicial = () => {
+  const [permissions] = usePermissions();
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  // Detecta login com base no localStorage
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  // Efeito para verificar o login ao carregar a página
-  useEffect(() => {
-    const loggedIn = localStorage.getItem("isLoggedIn") === "true";
-    setIsLoggedIn(loggedIn);
-  }, []);
 
   const images = [
     "/img/doacao.jpg",
     "/img/educacao.jpg",
-    "/img/saude.jpg"
+    "/img/banner.jpg"
   ];
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
-  };
+  }, [images.length]);
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+        nextSlide();
+    }, 5000);
+
+    return () => {
+        clearTimeout(timeout);
+    }
+  }, [currentSlide, nextSlide]);
+
   return (
     <div className={styles.homeInicial}>
-      <Header isLoggedIn={isLoggedIn} />
+      <Header isLoggedIn={permissions?.loggedIn} />
 
-      <section className={styles.hero}>
+      <section className={styles.hero}  style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${images[currentSlide]}')` }}>
         <div className={styles.hero_content}>
           <h1>
             Bem-vindo ao <br />
             <img src="/img/logoSmov.png" alt="Logo SMOV" className={styles.logo} />
           </h1>
           <p>Seja parte dessa nossa rede de amor e cuidado!</p>
+          <button className={styles.prev} onClick={prevSlide}>&#10094;</button>
+          <button className={styles.next} onClick={nextSlide}>&#10095;</button>
         </div>
       </section>
 
-      {!isLoggedIn ? (
-        <section className={styles.carousel_section}>
-          <div className={styles.carousel_container}>
-            <img
-              src={images[currentSlide]}
-              alt={`Slide ${currentSlide + 1}`}
-              className={styles.carousel_image}
-              onMouseEnter={nextSlide}
-            />
-            <button className={styles.prev} onClick={prevSlide}>&#10094;</button>
-            <button className={styles.next} onClick={nextSlide}>&#10095;</button>
-            <div className={styles.overlay_text}>
-              <h2>Voluntários em ação</h2>
-            </div>
-          </div>
-        </section>
-      ) : (
+      {permissions?.loggedIn && (
         <div style={{ textAlign: "center", margin: "40px 0" }}>
           <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
         </div>
