@@ -9,6 +9,29 @@
   padding: 80px 20px;
   text-align: center;
   position: relative;
+  -webkit-transition: background 2s ease-in-out;
+  transition: background 2s ease-in-out;
+}
+
+.hero_bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-size: cover;
+  background-position: center;
+  -webkit-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+}
+
+#alt-background {
+  transition: opacity 1s ease-in-out;
+}
+
+.hero_content {
+  position: relative;
+  z-index: 2;
 }
 
 .hero_content h1 {

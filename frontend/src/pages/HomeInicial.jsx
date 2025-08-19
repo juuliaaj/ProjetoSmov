@@ -1,18 +1,22 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import styles from "./HomeInicial.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
 
 const HomeInicial = () => {
-  const [permissions] = usePermissions();
-  const [currentSlide, setCurrentSlide] = useState(0);
-
-  const images = [
+  const images = useMemo (() => [
     "/img/doacao.jpg",
     "/img/educacao.jpg",
     "/img/banner.jpg"
-  ];
+  ], []);
+
+  const [permissions] = usePermissions();
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [activeSlide, setActiveSlide] = useState({
+    main: images[0],
+    alt: images[0]
+  });
 
   const nextSlide = useCallback(() => {
     setCurrentSlide((prev) => (prev + 1) % images.length);
@@ -27,16 +31,35 @@ const HomeInicial = () => {
         nextSlide();
     }, 5000);
 
+    setActiveSlide((prev) => ({
+      ...prev,
+      alt: images[currentSlide]
+    }));
+
+    document.getElementById("alt-background").style.opacity = 1;
+
+    const fadeTimeout = setTimeout(() => {
+      setActiveSlide((prev) => ({
+        ...prev,
+        main: prev.alt,
+      }));
+
+      document.getElementById("alt-background").style.opacity = 0;
+    }, 1000);
+
     return () => {
         clearTimeout(timeout);
+        clearTimeout(fadeTimeout);
     }
-  }, [currentSlide, nextSlide]);
+  }, [currentSlide, images, nextSlide, setActiveSlide]);
 
   return (
     <div className={styles.homeInicial}>
       <Header isLoggedIn={permissions?.loggedIn} />
 
-      <section className={styles.hero}  style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${images[currentSlide]}')` }}>
+      <section className={styles.hero}>
+        <div id="main-background" className={styles.hero_bg} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.main}')` }}></div>
+        <div id="alt-background" className={styles.hero_bg} style={{ opacity: 0, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.alt}')` }}></div>
         <div className={styles.hero_content}>
           <h1>
             Bem-vindo ao <br />
