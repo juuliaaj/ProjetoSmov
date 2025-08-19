@@ -30,7 +30,7 @@ exports.cadastro = async (req, res, next) => {
 
         const usuario = new Usuario(insertData[0].id_usuario, nome, null);
 
-        res.cookie('smovSessionID', data.user.id, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true });
+        res.cookie('smovSessionID', data.user.id, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: false });
         res.status(201).json({ message: "OK", data: usuario });
     } catch (error) {
         console.error("Erro ao criar usuário:", error);
@@ -62,7 +62,7 @@ exports.login = async (req, res, next) => {
 
         const usuario = new Usuario(userData[0].id_usuario, userData[0].nome, userData[0].foto_perfil);
 
-        res.cookie('smovSessionID', data.user.id, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: true });
+        res.cookie('smovSessionID', data.user.id, { maxAge: 1000 * 60 * 60 * 24 * 7, httpOnly: false });
         res.status(200).json({ message: "OK", data: usuario });
     } catch (error) {
         console.error("Erro ao fazer login:", error);
