@@ -10,9 +10,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "./Mapeamento.module.css";
 
-/** --------------------------
- *  Dados de ONGs por cidade
- *  -------------------------- */
+
 const ongsPorCidade = {
   sapiranga: [
     {
@@ -34,8 +32,7 @@ const ongsPorCidade = {
       endereco: "Av. Presidente Vargas, 321, Sapiranga",
       telefone: "(51) 3599-5678",
       categoria: "Assistência Social",
-      descricao:
-        "Atuação com famílias em vulnerabilidade e programas de doação.",
+      descricao: "Atuação com famílias em vulnerabilidade e programas de doação.",
     },
     {
       id: 3,
@@ -60,7 +57,6 @@ const ongsPorCidade = {
         "Atendimento de saúde preventiva e apoio psicológico para famílias.",
     },
   ],
-
   canoas: [
     {
       id: 4,
@@ -70,7 +66,8 @@ const ongsPorCidade = {
       endereco: "Av. Guilherme Schell, 456, Canoas",
       telefone: "(51) 3472-1234",
       categoria: "Assistência Social",
-      descricao: "Campanhas permanentes de alimentos, roupas e atendimentos.",
+      descricao:
+        "Campanhas permanentes de alimentos, roupas e atendimentos.",
     },
     {
       id: 5,
@@ -95,7 +92,6 @@ const ongsPorCidade = {
         "Ações de educação ambiental, reciclagem e plantio de árvores.",
     },
   ],
-
   ivoti: [
     {
       id: 9,
@@ -132,9 +128,7 @@ const ongsPorCidade = {
   ],
 };
 
-/** --------------------------
- *  Configuração de Mapa
- *  -------------------------- */
+
 const DEFAULT_CENTER = { lat: -29.6868, lng: -51.1281 };
 const MAP_CONTAINER_STYLE = { width: "100%", height: "100%" };
 const ZOOM_DEFAULT = 12;
@@ -143,21 +137,17 @@ export default function Mapeamento() {
   const [busca, setBusca] = useState("");
   const [cidadeSelecionada, setCidadeSelecionada] = useState(null);
   const [ongSelecionada, setOngSelecionada] = useState(null);
-
   const [origem, setOrigem] = useState(DEFAULT_CENTER);
-
-  const [modo, setModo] = useState("DRIVING"); // modo ativo para renderizar rota
+  const [modo, setModo] = useState("DRIVING");
   const [directions, setDirections] = useState(null);
-  const [tempos, setTempos] = useState(null); // {DRIVING: {durationText, distanceText}, WALKING: {...}, BICYCLING: {...}}
-
+  const [tempos, setTempos] = useState(null);
   const [infoAbertaId, setInfoAbertaId] = useState(null);
 
   const { isLoaded } = useJsApiLoader({
-    googleMapsApiKey: "AIzaSyBxO8LSKnOPx3bw5TvKvnj7TqkeOaWPB1g",
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     libraries: ["places"],
   });
 
-  /** Geolocalização do usuário */
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -171,19 +161,16 @@ export default function Mapeamento() {
     }
   }, []);
 
-  /** Lista de ONGs para a cidade buscada */
   const listaOngs = useMemo(() => {
     if (!cidadeSelecionada) return [];
     return ongsPorCidade[cidadeSelecionada] ?? [];
   }, [cidadeSelecionada]);
 
-  /** Centro do mapa (primeira ONG da cidade) */
   const centroMapa = useMemo(() => {
     if (!cidadeSelecionada || listaOngs.length === 0) return DEFAULT_CENTER;
     return { lat: listaOngs[0].lat, lng: listaOngs[0].lng };
   }, [cidadeSelecionada, listaOngs]);
 
-  /** Buscar cidade digitada */
   const handleBuscar = () => {
     const nomeCidade = busca.toLowerCase().trim();
     if (!nomeCidade) return;
@@ -207,7 +194,6 @@ export default function Mapeamento() {
     if (e.key === "Enter") handleBuscar();
   };
 
-  /** Abre painel da ONG e calcula tempos + rota do modo atual */
   const handleSelecionarOng = async (ong, abrirInfoWindow = false) => {
     setOngSelecionada(ong);
     setInfoAbertaId(abrirInfoWindow ? ong.id : null);
@@ -216,7 +202,6 @@ export default function Mapeamento() {
     await calcularRota(ong, modo);
   };
 
-  /** Calcula rota com Directions API */
   const calcularRota = (ong, travelMode) => {
     return new Promise((resolve) => {
       const directionsService = new window.google.maps.DirectionsService();
@@ -239,12 +224,10 @@ export default function Mapeamento() {
     });
   };
 
-  /** Calcula tempos/distaŝncias de DRIVING, WALKING e BICYCLING com Distance Matrix API */
   const calcularTempos = (ong) => {
     const dm = new window.google.maps.DistanceMatrixService();
     const modes = ["DRIVING", "WALKING", "BICYCLING"];
 
-    // Faz uma chamada por modo
     const promises = modes.map(
       (m) =>
         new Promise((resolve) => {
@@ -289,7 +272,6 @@ export default function Mapeamento() {
     });
   };
 
-  /** Alterar modo (e redesenhar rota) */
   const trocarModo = async (novoModo) => {
     if (!ongSelecionada) return;
     setModo(novoModo);
@@ -304,7 +286,6 @@ export default function Mapeamento() {
       <Header />
 
       <div className={styles.mapaWrapper}>
-        {/* Barra de Busca */}
         <div className={styles.searchContainer}>
           <div className={styles.searchBox}>
             <span className={styles.searchIcon} aria-hidden>
@@ -340,7 +321,6 @@ export default function Mapeamento() {
           </div>
         </div>
 
-        {/* Painel lateral (informações da ONG + tempos) */}
         {ongSelecionada && (
           <aside className={styles.routePanel}>
             <div className={styles.routeHeader}>
@@ -380,7 +360,6 @@ export default function Mapeamento() {
               </div>
             )}
 
-            {/* Blocos de tempo por modo */}
             <div className={styles.modesGrid}>
               {["DRIVING", "WALKING", "BICYCLING"].map((m) => (
                 <button
@@ -412,7 +391,6 @@ export default function Mapeamento() {
               ))}
             </div>
 
-            {/* Resumo do modo ativo */}
             <div className={styles.routeInfo}>
               <div className={styles.routeTime}>
                 <strong>{tempos?.[modo]?.durationText || "—"}</strong>
@@ -432,7 +410,6 @@ export default function Mapeamento() {
           </aside>
         )}
 
-        {/* Controles flutuantes de modo (estilo Google) */}
         <div className={styles.transportControls}>
           {["DRIVING", "WALKING", "BICYCLING"].map((m) => (
             <button
@@ -450,7 +427,6 @@ export default function Mapeamento() {
           ))}
         </div>
 
-        {/* Google Map */}
         <GoogleMap
           mapContainerStyle={MAP_CONTAINER_STYLE}
           center={centroMapa}
@@ -461,10 +437,7 @@ export default function Mapeamento() {
             mapTypeControl: false,
           }}
         >
-          {/* Marcador do usuário */}
-          <Marker position={origem} icon={undefined} />
-
-          {/* Marcadores das ONGs */}
+          <Marker position={origem} />
           {listaOngs.map((ong) => (
             <Marker
               key={ong.id}
@@ -473,7 +446,6 @@ export default function Mapeamento() {
             />
           ))}
 
-          {/* InfoWindow bonito (abre no clique do marcador) */}
           {infoAbertaId &&
             listaOngs
               .filter((o) => o.id === infoAbertaId)
@@ -508,7 +480,6 @@ export default function Mapeamento() {
                 </InfoWindow>
               ))}
 
-          {/* Rota desenhada */}
           {directions && (
             <DirectionsRenderer
               directions={directions}
