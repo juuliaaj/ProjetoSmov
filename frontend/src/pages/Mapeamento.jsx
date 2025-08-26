@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useState, useEffect } from "react";
+import usePermissions from "../hooks/usePermissions";
 
 const cidades = {
   "sapiranga": [-29.6415, -51.1489],
@@ -27,6 +28,8 @@ const Mapeamento = () => {
   const [busca, setBusca] = useState("");
   const [coordsPesquisa, setCoordsPesquisa] = useState(null);
 
+  const [permissions] = usePermissions();
+
   const handleBuscar = () => {
     const nomeCidade = busca.toLowerCase().trim();
     if (nomeCidade === "") {
@@ -44,7 +47,7 @@ const Mapeamento = () => {
 
   return (
     <div className={styles.mapeamento}>
-      <Header />
+      <Header isLoggedIn={permissions?.loggedIn} />
 
       <div className={styles.mapaWrapper}>
         <div className={styles.overlay}>

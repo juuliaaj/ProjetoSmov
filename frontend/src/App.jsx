@@ -2,7 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import LoginPage from "./pages/LoginPage";
 import DonationPage from "./pages/DonationPage";
 import HomeInicial from './pages/HomeInicial';
-import Mapeamento from './pages/mapeamento';
+import Mapeamento from './pages/Mapeamento';
+import ReservationPage from './pages/ReservationPage';
 import RecoverPassword from './pages/RecoverPassword';
 import ResetPassword from './pages/ResetPassword';
 
@@ -15,6 +16,7 @@ function App() {
       <Route path="/resetar" element={<ResetPassword />} />
       <Route path="/doacoes" element={<DonationPage />} />
       <Route path="/mapeamento" element={<Mapeamento />} />
+      <Route path="/reservas" element={<ReservationPage />} />
 
       {/* <Route path="*" element={<NotFound />} /> */}
     </Routes>
