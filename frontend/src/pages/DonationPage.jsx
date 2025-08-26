@@ -3,11 +3,14 @@ import { FaHome, FaCheckCircle } from 'react-icons/fa';
 import { FaPix } from 'react-icons/fa6';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import usePermissions from "../hooks/usePermissions";
 
 const DonationPage = () => {
+    const [permissions] = usePermissions();
+
     return (
         <div className={styles.donationPage}>
-           <Header />
+           <Header isLoggedIn={permissions?.loggedIn} />
 
             <section className={styles.hero}>
                 <div className={styles.hero_image}>

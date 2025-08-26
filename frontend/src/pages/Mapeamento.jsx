@@ -9,7 +9,7 @@ import {
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "./Mapeamento.module.css";
-
+import usePermissions from "../hooks/usePermissions";
 
 const ongsPorCidade = {
   sapiranga: [
@@ -171,6 +171,8 @@ export default function Mapeamento() {
     return { lat: listaOngs[0].lat, lng: listaOngs[0].lng };
   }, [cidadeSelecionada, listaOngs]);
 
+  const [permissions] = usePermissions();
+
   const handleBuscar = () => {
     const nomeCidade = busca.toLowerCase().trim();
     if (!nomeCidade) return;
@@ -283,7 +285,7 @@ export default function Mapeamento() {
 
   return (
     <div className={styles.mapeamento}>
-      <Header />
+      <Header isLoggedIn={permissions?.loggedIn} />
 
       <div className={styles.mapaWrapper}>
         <div className={styles.searchContainer}>
