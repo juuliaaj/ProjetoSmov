@@ -1,25 +1,119 @@
 import styles from "./ReservationPage.module.css";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { FaCalendarAlt, FaCheck } from 'react-icons/fa';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
 
+import {
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button,
+} from '@mui/material';
+
+import { TimePicker } from '@mui/x-date-pickers';
+
+import { toast, ToastContainer } from "react-toastify";
+import { TOAST_CONFIG } from "../utils/toast";
+
+import SelectCidades from "../components/SelectCidades";
+import fetcher from "../utils/fetcher";
+import { useRef } from "react";
+
 const ReservationPage = () => {
     const [permissions] = usePermissions();
-    const [selectedDate, setSelectedDate] = useState(null);
-    const [availableSlots, setAvailableSlots] = useState(null);
+    
+    const [filters, setFilters] = useState({
+        cidade: "",
+        date: "",
+    });
+
+    const [confirmationOpen, setConfirmationOpen] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [searched, setSearched] = useState(false);
+
+    const [availableSlots, setAvailableSlots] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [selectedSlot, setSelectedSlot] = useState({});
+
     const [reservations, setReservations] = useState([]);
 
-    useEffect(() => {
-        setAvailableSlots(null);
+    const searchTimer = useRef(null);
 
-        if (selectedDate) {
-            setTimeout(() => {
-                setAvailableSlots([]);
-            }, 2000);
+    const onChangeCidade = useCallback((value) => {
+        setFilters((prev) => ({ ...prev, cidade: value }));
+    }, []);
+
+    const openModal = useCallback((slot) => {
+        setConfirmationOpen(true);
+        setSelectedSlot({ ...slot, date: filters.date, time: null, error: false });
+    }, [filters.date]);
+
+    const getInstituicoes = useCallback(async () => {
+        setLoading(true);
+        setSearched(true);
+        setErrorMessage("");
+        setAvailableSlots([]);
+
+        fetcher.get('/instituicoes/reservar', { params: { cidade: filters.cidade, date: filters.date } })
+            .then(response => {
+                let slots = response.data.data || [];
+
+                slots = slots.map(slot => ({
+                    nome: slot.nome,
+                    horario_inicial: slot.instituicoes_horarios[0].horario_inicial.slice(0, 5),
+                    horario_final: slot.instituicoes_horarios[0].horario_final.slice(0, 5),
+                    rua: slot.instituicoes_enderecos[0].rua,
+                    numero: slot.instituicoes_enderecos[0].numero,
+                    bairro: slot.instituicoes_enderecos[0].bairro,
+                }));
+
+                setAvailableSlots(slots);
+            })
+            .catch(error => {
+                setErrorMessage(error.response?.data?.error || "Erro ao buscar horários disponíveis");
+                console.error("Error fetching available slots:", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [filters.cidade, filters.date]);
+
+    const handleConfirm = useCallback(() => {
+        if (!selectedSlot.time) {
+            setSelectedSlot((prev) => ({ ...prev, error: true }));
+            
+            return;
         }
-    }, [selectedDate]);
+
+        toast.success(`Reserva confirmada na instituição ${selectedSlot.nome} para o dia ${filters.date.split('-').reverse().join('/')} às ${selectedSlot.time}.`, TOAST_CONFIG);
+
+        setConfirmationOpen(false);
+
+        // setReservations((prev) => ([...prev, { id: prev.length + 1, nome: selectedSlot.nome, date: filters.date.split('-').reverse().join('/'), time: selectedSlot.time }]));
+
+    }, [filters.date, selectedSlot]);
+
+    useEffect(() => {
+        if (filters.cidade && filters.date) {
+            if (searchTimer.current) {
+                clearTimeout(searchTimer.current);
+            }
+
+            searchTimer.current = setTimeout(() => {
+                getInstituicoes();
+            }, 500);
+        }
+    }, [filters.cidade, filters.date, getInstituicoes]);
+
+    useEffect(() => {
+        if (!confirmationOpen) {
+            setSelectedSlot(null);
+        }
+    }, [confirmationOpen]);
 
     return (
         <div className={styles.reservationPage}>
@@ -30,23 +124,34 @@ const ReservationPage = () => {
                     <h1><FaCalendarAlt /> Nova Reserva</h1>
                     <p className={styles.subtitle}>Reserve agora uma visita a uma de nossas ONGs parceiras!</p>
 
-                    <input type="date" name="reservationDate" id="reservationDate" className={styles.datePicker} value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
-                
-                    {selectedDate && !availableSlots && (
-                        <p className={styles.searchInfo}>Buscando horários disponíveis...</p>
-                    )}
+                    <div className={styles.inputContainer}>
+                        <SelectCidades onChange={onChangeCidade} />
+                        <input type="date" name="reservationDate" id="reservationDate" className={styles.datePicker} onChange={(e) => setFilters({ ...filters, date: e.target.value })} value={filters.date} />
+                    </div>
 
-                    {availableSlots && availableSlots.length === 0 && (
-                        <p className={styles.searchInfo}>Nenhum horário disponível encontrado.</p>
+                    {(loading && (
+                        <p className={styles.searchInfo}>Buscando horários disponíveis...</p>
+                    )) || (availableSlots.length > 0 && (
+                        <ul className={styles.slotsList}>
+                            {availableSlots.map((slot, index) => (
+                                <li key={index} className={styles.slotItem} onClick={() => openModal(slot)}>
+                                    <span className={styles.slotName}>{slot.nome}</span>
+                                    <span className={styles.slotTime}>{slot.horario_inicial} - {slot.horario_final}</span>
+                                    <span className={styles.slotAddress}>{slot.rua}, {slot.numero} - {slot.bairro}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    )) || (searched && (
+                        <p className={styles.searchInfo}>{errorMessage || "Nenhum horário disponível com os filtros selecionados."}</p>
+                    )) || (
+                        <p className={styles.searchInfo}>Use os filtros acima para buscar horários disponíveis.</p>
                     )}
                 </section>
 
-                <section className={styles.section}>
-                    <h1><FaCheck /> Minhas Reservas</h1>
+                {reservations.length > 0 && (
+                    <section className={styles.section}>
+                        <h1><FaCheck /> Minhas Reservas</h1>
 
-                    {reservations.length === 0 ? (
-                        <p className={styles.searchInfo}>Nenhuma reserva encontrada.</p>
-                    ) : (
                         <ul>
                             {reservations.map((reservation) => (
                                 <li key={reservation.id}>
@@ -54,11 +159,35 @@ const ReservationPage = () => {
                                 </li>
                             ))}
                         </ul>
-                    )}
-                </section>
+                    </section>
+                )}
             </main>
             
             <Footer />
+
+            <Dialog open={confirmationOpen} onClose={() => setConfirmationOpen(false)}>
+                <DialogTitle>Confirmação</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Defina o horário para confirmar sua reserva na instituição <strong>{selectedSlot?.nome}</strong> no dia <strong>{filters.date.split('-').reverse().join('/')}</strong>.
+                    </DialogContentText>
+                    <TimePicker
+                        ampm={false}
+                        label="Horário"
+                        onChange={(newValue) => setSelectedSlot({ ...selectedSlot, time: new Date(newValue).getHours().toString().padStart(2, '0') + ':' + new Date(newValue).getMinutes().toString().padStart(2, '0'), error: false })}
+                        slotProps={{ textField: { fullWidth: true, margin: 'normal', error: selectedSlot?.error } }}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setConfirmationOpen(false)} color="primary">
+                        Cancelar
+                    </Button>
+                    <Button onClick={handleConfirm} color="primary">
+                        Confirmar
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <ToastContainer />
         </div>
     );
 };

@@ -23,13 +23,52 @@ main {
     border: 1px solid #555555;
     border-radius: 4px;
     font-size: 16px;
-    margin: 20px 0 10px;
     color: #7f7f7f;
     background: #292929;
 }
 
+.inputContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin: 20px 0 10px;
+}
+
 .searchInfo {
     text-align: center;
+    color: #7f7f7f;
+}
+
+.slotsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.slotItem {
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    cursor: pointer;
+}
+
+.slotTime {
+    font-size: 10px;
+    color: #7f7f7f;
+    text-align: right;
+}
+
+.slotAddress {
+    grid-column: span 2;
+    margin-top: 5px;
+    font-size: 12px;
     color: #7f7f7f;
 }
 
