@@ -1,6 +1,6 @@
 import styles from "./ReservationPage.module.css";
 import { useCallback, useEffect, useState } from "react";
-import { FaCalendarAlt, FaCheck } from 'react-icons/fa';
+import { FaCalendarAlt, FaCheck, FaTrashAlt } from 'react-icons/fa';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
@@ -23,6 +23,29 @@ import SelectCidades from "../components/SelectCidades";
 import fetcher from "../utils/fetcher";
 import { useRef } from "react";
 
+const RESERVATION_STATUS = {
+    P: {
+        label: "Pendente",
+        color: "#f8c313ff"
+    },
+    A: {
+        label: "Aprovada",
+        color: "#1b98ebff"
+    },
+    R: {
+        label: "Recusada",
+        color: "#e63946ff"
+    },
+    C: {
+        label: "Cancelada",
+        color: "#e63946ff"
+    },
+    F: {
+        label: "Finalizada",
+        color: "#1abe43ff"
+    }
+}
+
 const ReservationPage = () => {
     const [permissions] = usePermissions();
     
@@ -31,9 +54,10 @@ const ReservationPage = () => {
         date: "",
     });
 
-    const [confirmationOpen, setConfirmationOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [searched, setSearched] = useState(false);
+    const [confirmationOpen, setConfirmationOpen] = useState(false);
+    const [cancelReservation, setCancelReservation] = useState(null);
 
     const [availableSlots, setAvailableSlots] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
@@ -64,6 +88,7 @@ const ReservationPage = () => {
 
                 slots = slots.map(slot => ({
                     nome: slot.nome,
+                    id_instituicao: slot.id_instituicao,
                     horario_inicial: slot.instituicoes_horarios[0].horario_inicial.slice(0, 5),
                     horario_final: slot.instituicoes_horarios[0].horario_final.slice(0, 5),
                     rua: slot.instituicoes_enderecos[0].rua,
@@ -82,6 +107,17 @@ const ReservationPage = () => {
             });
     }, [filters.cidade, filters.date]);
 
+    const getReservations = useCallback(async () => {
+        fetcher.get('/reservas')
+            .then(response => {
+                let reservas = response?.data?.data || [];
+                setReservations(reservas);
+            })
+            .catch(error => {
+                console.error("Error fetching reservations:", error);
+            });
+    }, []);
+
     const handleConfirm = useCallback(() => {
         if (!selectedSlot.time) {
             setSelectedSlot((prev) => ({ ...prev, error: true }));
@@ -89,23 +125,52 @@ const ReservationPage = () => {
             return;
         }
 
-        toast.success(`Reserva confirmada na instituição ${selectedSlot.nome} para o dia ${filters.date.split('-').reverse().join('/')} às ${selectedSlot.time}.`, TOAST_CONFIG);
-
+        const toaster = toast.loading("Realizando reserva...", TOAST_CONFIG);
+        
         setConfirmationOpen(false);
 
-        // setReservations((prev) => ([...prev, { id: prev.length + 1, nome: selectedSlot.nome, date: filters.date.split('-').reverse().join('/'), time: selectedSlot.time }]));
+        fetcher.post('/reservas', {
+            id_instituicao: selectedSlot.id_instituicao,
+            date: selectedSlot.date,
+            time: selectedSlot.time,
+        }).then((resp) => {
+            console.log(resp);
+            toast.update(toaster, { render: `Reserva confirmada na instituição ${selectedSlot.nome} para o dia ${filters.date.split('-').reverse().join('/')} às ${selectedSlot.time}.`, type: "success", isLoading: false });
 
-    }, [filters.date, selectedSlot]);
+            getReservations();            
+        }).catch((error) => {
+            console.error(error);
+            toast.update(toaster, { render: error?.response?.data?.error || "Erro ao salvar reserva", type: "error", isLoading: false });
+        });
+    }, [filters.date, selectedSlot, getReservations]);
+
+    const handleCancelReservation = useCallback(() => {
+        fetcher.post(`/reservas/cancelar/${cancelReservation}`)
+            .then(() => {
+                toast.success("Reserva cancelada com sucesso!", TOAST_CONFIG);
+                getReservations();
+            })
+            .catch((error) => {
+                console.error(error);
+                toast.error(error?.response?.data?.error || "Erro ao cancelar reserva", TOAST_CONFIG);
+            })
+            .finally(() => {
+                setCancelReservation(null);
+            });
+    }, [cancelReservation, getReservations]);
 
     useEffect(() => {
-        if (filters.cidade && filters.date) {
-            if (searchTimer.current) {
-                clearTimeout(searchTimer.current);
-            }
+        if (searchTimer.current) {
+            clearTimeout(searchTimer.current);
+        }
 
+        if (filters.cidade && filters.date) {
             searchTimer.current = setTimeout(() => {
                 getInstituicoes();
             }, 500);
+        } else {
+            setAvailableSlots([]);
+            setSearched(false);
         }
     }, [filters.cidade, filters.date, getInstituicoes]);
 
@@ -114,6 +179,10 @@ const ReservationPage = () => {
             setSelectedSlot(null);
         }
     }, [confirmationOpen]);
+
+    useEffect(() => {
+        getReservations();
+    }, [getReservations]);
 
     return (
         <div className={styles.reservationPage}>
@@ -152,10 +221,20 @@ const ReservationPage = () => {
                     <section className={styles.section}>
                         <h1><FaCheck /> Minhas Reservas</h1>
 
-                        <ul>
+                        <ul className={styles.reservationsList}>
                             {reservations.map((reservation) => (
-                                <li key={reservation.id}>
-                                    {reservation.date} - {reservation.time}
+                                <li key={reservation.id} className={styles.reservationItem}>
+                                    <span className={styles.reservationInstitution}>{reservation.instituicoes.nome}</span>
+                                    <span className={styles.reservationDate}>{reservation.data}</span>
+                                    <div className={styles.reservationStatusContainer}>
+                                        {['P', 'A'].includes(reservation.status) ? (
+                                            <button className={styles.btnCancelarReserva} title="Cancelar Reserva" onClick={() => setCancelReservation(reservation.id)}><FaTrashAlt /></button>
+                                        ) : null}
+
+                                        <span style={{ backgroundColor: RESERVATION_STATUS[reservation.status]?.color || '#7f7f7f' }}>
+                                            {RESERVATION_STATUS[reservation.status]?.label || 'Desconhecido'}
+                                        </span>
+                                    </div>
                                 </li>
                             ))}
                         </ul>
@@ -187,6 +266,24 @@ const ReservationPage = () => {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <Dialog open={!!cancelReservation} onClose={() => setCancelReservation(null)}>
+                <DialogTitle>Confirmação</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Tem certeza que deseja cancelar sua reserva?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setCancelReservation(null)} color="primary">
+                        Não
+                    </Button>
+                    <Button onClick={handleCancelReservation} color="primary">
+                        Sim
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
             <ToastContainer />
         </div>
     );
