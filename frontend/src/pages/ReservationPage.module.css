@@ -23,9 +23,15 @@ main {
     border: 1px solid #555555;
     border-radius: 4px;
     font-size: 16px;
-    margin: 20px 0 10px;
     color: #7f7f7f;
     background: #292929;
+}
+
+.inputContainer {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 10px;
+    margin: 20px 0 10px;
 }
 
 .searchInfo {
@@ -33,7 +39,118 @@ main {
     color: #7f7f7f;
 }
 
-@media (max-width: 860px) {
-    
+.slotsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.slotItem {
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 8px;
+    margin-bottom: 10px;
+    display: grid;
+    grid-template-columns: 75% 25%;
+    cursor: pointer;
+}
+
+.slotTime {
+    font-size: 10px;
+    color: #7f7f7f;
+    text-align: right;
+}
+
+.slotAddress {
+    grid-column: span 2;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #7f7f7f;
+}
+
+.reservationsList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.reservationItem {
+    background: #292929;
+    border: 1px solid #444;
+    border-radius: 6px;
+    padding: 10px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+}
+
+.reservationItem:hover {
+    background: #333;
+}
+
+.reservationDate {
+    font-size: 10px;
+    color: #7f7f7f;
+}
+
+.reservationStatusContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+}
+
+.reservationStatusContainer span {
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    text-align: center;
+    background-color: #7f7f7f;
+    color: #fff;
+    min-width: 80px;
+}
+
+.reservationStatusContainer span:last-child {
+    min-width: 80px;
+}
+
+.btnCancelarReserva {
+    background-color: #e74c3c;
+    cursor: pointer;
+    font-size: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+    border: none;
+}
+
+@media (max-width: 600px) {
+    .reservationInstitution {
+        font-size: 12px;
+    }
+
+    .reservationDate {
+        font-size: 8px;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+
+    .subtitle, .searchInfo {
+        font-size: 10px;
+    }
 }
 
