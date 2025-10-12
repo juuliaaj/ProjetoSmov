@@ -1,0 +1,87 @@
+.container {
+  min-height: 100vh;
+  background-color: #141414;
+  color: #fff;
+  padding: 2rem 1rem;
+}
+
+.title {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-size: 1rem;
+  color: #aaa;
+  margin-bottom: 2rem;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  font-size: 1rem;
+  color: #ccc;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.card {
+  background-color: #1d1d1d;
+  padding: 1.5rem;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+.logo {
+  max-width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.linkDoc {
+  color: #9d5cff;
+  margin-top: 0.5rem;
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.approveBtn {
+  background-color: #3cb371;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.rejectBtn {
+  background-color: #e63946;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.approveBtn:hover {
+  background-color: #2e8b57;
+}
+
+.rejectBtn:hover {
+  background-color: #c62828;
+}

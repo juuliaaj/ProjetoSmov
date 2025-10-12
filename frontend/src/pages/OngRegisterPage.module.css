@@ -1,0 +1,467 @@
+.container {
+  min-height: 100vh;
+  background-color: #1a1a1a;
+  color: #ffffff;
+}
+
+.main {
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.heroSection {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.subtitle {
+  font-size: 1.25rem;
+  color: #f0f0f0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.formWrapper {
+  max-width: 900px;
+  margin: -3rem auto 4rem;
+  background-color: #2d2d2d;
+  border-radius: 1rem;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.progressBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+  position: relative;
+}
+
+.progressStep {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  flex: 1;
+  position: relative;
+  z-index: 2;
+}
+
+.progressStep span {
+  font-size: 0.875rem;
+  color: #a0a0a0;
+  white-space: nowrap;
+}
+
+.progressStep.active span {
+  color: #8b5cf6;
+  font-weight: 600;
+}
+
+.progressCircle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background-color: #3d3d3d;
+  border: 2px solid #4d4d4d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1.125rem;
+  color: #808080;
+  transition: all 0.3s ease;
+}
+
+.progressStep.active .progressCircle {
+  background-color: #8b5cf6;
+  border-color: #8b5cf6;
+  color: #ffffff;
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+}
+
+.progressLine {
+  flex: 1;
+  height: 2px;
+  background-color: #4d4d4d;
+  margin: 0 -1rem;
+  position: relative;
+  top: -1.75rem;
+  z-index: 1;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.formSection {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.sectionTitle {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #ffffff;
+  border-bottom: 2px solid #8b5cf6;
+  padding-bottom: 0.5rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.formGroup label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+  background-color: #1a1a1a;
+  border: 1px solid #4d4d4d;
+  border-radius: 0.5rem;
+  padding: 0.875rem;
+  color: #ffffff;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+  outline: none;
+  border-color: #8b5cf6;
+  box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.formGroup input::placeholder,
+.formGroup textarea::placeholder {
+  color: #707070;
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+.infoBox {
+  background-color: #3d3d3d;
+  border-left: 4px solid #8b5cf6;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  margin: 1rem 0;
+}
+
+.infoBox h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #ffffff;
+}
+
+.infoBox p {
+  font-size: 0.95rem;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+.fileSection {
+  margin: 1.5rem 0;
+}
+
+.fileSection h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #ffffff;
+}
+
+.fileUpload {
+  margin-bottom: 1rem;
+}
+
+.fileUpload input[type="file"] {
+  display: none;
+}
+
+.fileUpload label {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: #1a1a1a;
+  border: 2px dashed #4d4d4d;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.fileUpload label:hover {
+  border-color: #8b5cf6;
+  background-color: #252525;
+}
+
+.fileUpload label svg {
+  color: #8b5cf6;
+  flex-shrink: 0;
+}
+
+.fileUpload label span:first-of-type {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #e0e0e0;
+}
+
+.fileName {
+  font-size: 0.875rem;
+  color: #10b981;
+  margin-left: auto;
+}
+
+.required::after {
+  content: "";
+}
+
+.formActions {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #4d4d4d;
+}
+
+.btnPrimary,
+.btnSecondary {
+  padding: 0.875rem 2rem;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  flex: 1;
+  max-width: 200px;
+}
+
+.btnPrimary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #ffffff;
+}
+
+.btnPrimary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btnPrimary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btnSecondary {
+  background-color: #3d3d3d;
+  color: #ffffff;
+  border: 1px solid #4d4d4d;
+}
+
+.btnSecondary:hover:not(:disabled) {
+  background-color: #4d4d4d;
+}
+
+.successMessage,
+.errorMessage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 0.5rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.successMessage {
+  background-color: rgba(16, 185, 129, 0.1);
+  border: 1px solid #10b981;
+}
+
+.successMessage svg {
+  color: #10b981;
+}
+
+.successMessage h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #10b981;
+  margin: 0;
+}
+
+.successMessage p {
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.errorMessage {
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid #ef4444;
+}
+
+.errorMessage svg {
+  color: #ef4444;
+}
+
+.errorMessage h3 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #ef4444;
+  margin: 0;
+}
+
+.errorMessage p {
+  color: #e0e0e0;
+  margin: 0;
+}
+
+.footer {
+  background-color: #2d2d2d;
+  border-top: 1px solid #3d3d3d;
+  padding: 2rem;
+  margin-top: 4rem;
+}
+
+.footerContent {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: #b0b0b0;
+  font-size: 0.875rem;
+}
+
+.cimolLogo {
+  height: 50px;
+  width: auto;
+}
+
+@media (max-width: 768px) {
+  .header {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+
+  .nav a {
+    font-size: 0.75rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .formWrapper {
+    margin: -2rem 1rem 2rem;
+    padding: 2rem 1.5rem;
+  }
+
+  .progressBar {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .progressLine {
+    display: none;
+  }
+
+  .progressStep {
+    flex-direction: row;
+    width: 100%;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+  }
+
+  .formActions {
+    flex-direction: column;
+  }
+
+  .btnPrimary,
+  .btnSecondary {
+    max-width: 100%;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection {
+    padding: 2rem 1rem;
+  }
+
+  .title {
+    font-size: 1.75rem;
+  }
+
+  .subtitle {
+    font-size: 0.95rem;
+  }
+
+  .formWrapper {
+    padding: 1.5rem 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .progressCircle {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1rem;
+  }
+
+  .progressStep span {
+    font-size: 0.75rem;
+  }
+}

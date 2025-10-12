@@ -6,6 +6,12 @@ import Mapeamento from './pages/Mapeamento';
 import ReservationPage from './pages/ReservationPage';
 import RecoverPassword from './pages/RecoverPassword';
 import ResetPassword from './pages/ResetPassword';
+<<<<<<< Updated upstream
+=======
+import OngRegisterPage from './pages/OngRegisterPage';
+import AdminDashboard from "./pages/AdminDashboard";
+import ONGsPage from './pages/ONGsPage';
+>>>>>>> Stashed changes
 
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';

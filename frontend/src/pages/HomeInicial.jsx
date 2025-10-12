@@ -3,6 +3,7 @@ import styles from "./HomeInicial.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
+import { Link } from "react-router-dom";
 
 const HomeInicial = () => {
   const images = useMemo (() => [
@@ -73,7 +74,10 @@ const HomeInicial = () => {
 
       {permissions?.loggedIn && (
         <div style={{ textAlign: "center", margin: "40px 0" }}>
-          <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
+          <Link to="/cadastro">
+            <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
+          </Link>
+          
         </div>
       )}
 
