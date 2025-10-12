@@ -10,7 +10,13 @@ exports.get = async (req, res, next) => {
                 nome
             ),
             instituicoes_enderecos!inner (
-                
+                latitude,
+                longitude,
+                cep,
+                rua,
+                numero,
+                bairro,
+                estado,
                 cidades!inner (
                     nome
                 )
