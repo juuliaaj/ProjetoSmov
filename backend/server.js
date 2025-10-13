@@ -20,19 +20,23 @@ app.use(cookieParser());
 app.use(cors({
     origin: process.env.FRONTEND_URL,
     methods: ["GET", "PUT", "POST", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    allowedHeaders: ["Content-Type", "Accept"],
     credentials: true
 }))
 
 app.use(async (req, res, next) => {
-    if (req.method === 'OPTIONS' || req.path.startsWith('/auth')) {
+    const isSessionRoute = req.path === '/auth/me';
+
+    if (req.method === 'OPTIONS' || (req.path.startsWith('/auth') && !isSessionRoute)) {
         return next();
     }
 
-    const token = req?.headers?.authorization?.replace('Bearer ', '');
+    const token = req.cookies.smovSessionID;
     
-    if (!token) {
+    if (!isSessionRoute && !token) {
         return res.status(401).json({ error: "Unauthorized" });
+    } else if (!token) {
+        return res.status(200).json({ data: null });
     }
 
     req.token = token;
@@ -40,13 +44,29 @@ app.use(async (req, res, next) => {
     const { data: userData, error: userError } = await supabase
             .from('usuarios')
             .select()
-            .eq('id_interno', token);
+            .eq('id_interno', token)
+            .single();
 
-    if (userError || !userData.length) {
+    if (!isSessionRoute && (userError || !userData)) {
         return res.status(401).json({ error: "Unauthorized" });
+    } else if (userError || !userData) {
+        return res.status(200).json({ data: null });
     }
 
-    req.user = userData[0];
+    if (isSessionRoute) {
+        return res.status(200).json(
+            {
+                data: {
+                    id_usuario: userData.id_usuario,
+                    nome: userData.nome,
+                    foto_perfil: userData.foto_perfil,
+                    admin: userData.admin || false,
+                }
+            }
+        );
+    }
+
+    req.user = userData;
 
     next();
 });
