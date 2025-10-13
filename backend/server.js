@@ -11,6 +11,7 @@ const PORT = process.env.PORT || 3000;
 const supabase = require('./src/utils/supabase.js');
 const userRoutes = require("./src/routes/usuarioRoutes.js");
 const cidadeRoutes = require("./src/routes/cidadeRoutes.js");
+const categoriaRoutes = require("./src/routes/categoriaRoutes.js");
 const instituicaoRoutes = require("./src/routes/instituicaoRoutes.js");
 const reservaRoutes = require("./src/routes/reservaRoutes.js");
 
@@ -73,6 +74,7 @@ app.use(async (req, res, next) => {
 
 app.use("/auth", userRoutes);
 app.use("/cidades", cidadeRoutes);
+app.use("/categorias", categoriaRoutes);
 app.use("/instituicoes", instituicaoRoutes);
 app.use("/reservas", reservaRoutes);
 

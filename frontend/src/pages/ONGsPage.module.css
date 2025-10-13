@@ -1,0 +1,386 @@
+.container {
+  min-height: 100vh;
+  background-color: #1a1d29;
+  color: white;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  background-color: #1a1d29;
+  padding: 1.5rem 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.logoS {
+  color: #8b5cf6;
+}
+
+.logoM {
+  color: #3b82f6;
+}
+
+.logoPin {
+  color: #ef4444;
+  font-size: 1.8rem;
+}
+
+.logoV {
+  color: #10b981;
+}
+
+.nav {
+  display: flex;
+  gap: 2.5rem;
+  align-items: center;
+}
+
+.navLink {
+  color: white;
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: color 0.3s;
+}
+
+.navLink:hover {
+  color: #3b82f6;
+}
+
+.main {
+  flex: 1;
+  padding: 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.searchSection {
+  margin-bottom: 3rem;
+}
+
+.searchContainer {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  max-width: 600px;
+}
+
+.searchInput {
+  flex: 1;
+  padding: 0.875rem 1.5rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.95rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.searchInput::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.searchInput:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: #3b82f6;
+}
+
+.searchButton {
+  padding: 0.875rem 1.5rem;
+  background-color: #3b82f6;
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.searchButton:hover {
+  background-color: #2563eb;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.filterSelect {
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  color: white;
+  font-size: 0.9rem;
+  cursor: pointer;
+  outline: none;
+  min-width: 200px;
+  transition: all 0.3s;
+}
+
+.filterSelect:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.filterSelect:focus {
+  border-color: #3b82f6;
+}
+
+.filterSelect option {
+  background-color: #1a1d29;
+  color: white;
+}
+
+.ongsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2.5rem;
+  margin-top: 2rem;
+}
+
+.ongCard {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s;
+  cursor: pointer;
+}
+
+.ongCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 8px 24px rgba(59, 130, 246, 0.2);
+}
+
+.ongImageContainer {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* padding: 2rem; */
+}
+
+.ongImage {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.ongPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #ddd;
+}
+
+.placeholderIcon {
+  font-size: 8rem;
+}
+
+.ongInfo {
+  padding: 1.5rem;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.ongName {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding-bottom: 0.5rem;
+}
+
+.ongLocation {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.7);
+  margin: 0;
+  text-align: center;
+}
+
+.loading {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.emptyState {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer {
+  background-color: #0f1117;
+  padding: 2rem 3rem;
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footerContent {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footerEmail {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.footerEmail span:first-child {
+  font-size: 1.5rem;
+  color: #3b82f6;
+}
+
+.footerCopyright {
+  text-align: center;
+  font-size: 0.875rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.footerCopyright p {
+  margin: 0.25rem 0;
+}
+
+.footerLogo {
+  width: 60px;
+  height: 60px;
+  background-color: white;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cimolLogo {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+@media (max-width: 1024px) {
+  .header {
+    flex-direction: column;
+    gap: 1.5rem;
+    padding: 1.5rem 2rem;
+  }
+
+  .nav {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  .main {
+    padding: 2rem;
+  }
+
+  .ongsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+  }
+
+  .footerContent {
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .header {
+    padding: 1rem 1.5rem;
+  }
+
+  .nav {
+    gap: 1rem;
+  }
+
+  .navLink {
+    font-size: 0.75rem;
+  }
+
+  .main {
+    padding: 1.5rem;
+  }
+
+  .searchContainer {
+    flex-direction: column;
+  }
+
+  .searchButton {
+    width: 100%;
+  }
+
+  .filters {
+    flex-direction: column;
+  }
+
+  .filterSelect {
+    width: 100%;
+  }
+
+  .ongsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .footer {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    font-size: 1.5rem;
+  }
+
+  .nav {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .main {
+    padding: 1rem;
+  }
+
+  .ongName {
+    font-size: 1.1rem;
+  }
+
+  .ongLocation {
+    font-size: 0.85rem;
+  }
+}

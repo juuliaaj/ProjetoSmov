@@ -8,7 +8,7 @@ import RecoverPassword from './pages/RecoverPassword';
 import ResetPassword from './pages/ResetPassword';
 import OngRegisterPage from './pages/OngRegisterPage';
 import AdminDashboard from "./pages/AdminDashboard";
-// import ONGsPage from './pages/ONGsPage';
+import ONGsPage from './pages/ONGsPage';
 
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -35,6 +35,7 @@ function App() {
           <Route path="/reservas" element={<ReservationPage />} />
           <Route path="/cadastro" element={<OngRegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/ongs" element={<ONGsPage />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>

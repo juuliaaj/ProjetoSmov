@@ -4,10 +4,10 @@ exports.get = async (req, res, next) => {
     const { id, nome } = req.query;
 
     try {
-        const query = supabase.from('cidades').select();
+        const query = supabase.from('categorias').select();
 
         if (id) {
-            query.eq('id_cidade', parseInt(id));
+            query.eq('id_categoria', parseInt(id));
         }
 
         if (nome) {
@@ -20,7 +20,7 @@ exports.get = async (req, res, next) => {
 
         res.status(200).json({ message: "OK", data });
     } catch (error) {
-        console.error("Erro ao buscar cidades:", error);
-        res.status(500).json({ error: "Erro ao buscar cidades" });
+        console.error("Erro ao buscar categorias:", error);
+        res.status(500).json({ error: "Erro ao buscar categorias" });
     }
 }
