@@ -1,0 +1,266 @@
+.container {
+  min-height: 100vh;
+  background: linear-gradient(160deg, #1e293b 0%, #0f172a 100%);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.4s;
+}
+
+.container.light {
+  background: linear-gradient(160deg, #f0f4ff 0%, #dce6ff 100%);
+  color: #1e1e2f;
+}
+
+.main {
+  flex: 1;
+  padding: 3rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileCard {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 3rem;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.15);
+  backdrop-filter: blur(12px);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: all 0.3s ease;
+}
+
+.avatarSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.8rem;
+  position: relative;
+}
+
+.avatarWrapper {
+  position: relative;
+  width: 150px;
+  height: 150px;
+}
+
+.avatarGlow {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #3b82f6, #8b5cf6, #3b82f6);
+  animation: rotate 5s linear infinite;
+  filter: blur(14px);
+  opacity: 0.6;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.profileImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fileInput {
+  display: none;
+}
+
+.uploadIcon {
+  position: absolute;
+  bottom: -10px;
+  right: 10px;
+  color: #8b5cf6;
+  background: #1e1e2f;
+  border-radius: 50%;
+  padding: 6px;
+}
+
+.initial {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #fff;
+  z-index: 2;
+}
+
+.name {
+  font-size: 1.8rem;
+  font-weight: 700;
+}
+
+.email {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.bio {
+  font-style: italic;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.inputEdit,
+.textarea {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  color: white;
+  width: 80%;
+  text-align: center;
+}
+
+.textarea {
+  resize: none;
+  height: 70px;
+}
+
+.editButton {
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  margin-top: 0.5rem;
+  transition: 0.3s;
+}
+
+.editButton:hover {
+  opacity: 0.85;
+  transform: scale(1.03);
+}
+
+.infoSection,
+.prefSection,
+.themeSection {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 15px;
+  padding: 1.5rem;
+}
+
+h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.prefItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.8rem;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #555;
+  transition: 0.4s;
+  border-radius: 22px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: #8b5cf6;
+}
+
+input:checked + .slider:before {
+  transform: translateX(20px);
+}
+
+.themeButton {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.themeButton:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.message {
+  margin-top: 1rem;
+  text-align: center;
+  color: #a78bfa;
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  font-size: 1.3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+@keyframes rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 800px) {
+  .profileCard {
+    padding: 2rem;
+  }
+  .avatarWrapper {
+    width: 120px;
+    height: 120px;
+  }
+}
