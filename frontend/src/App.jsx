@@ -9,7 +9,6 @@ import ResetPassword from './pages/ResetPassword';
 import ONGsPage from './pages/ONGsPage';
 import UserProfile from './pages/UserProfile';
 
-
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -35,8 +34,6 @@ function App() {
           <Route path="/reservas" element={<ReservationPage />} />
           <Route path="/ongs" element={<ONGsPage />} />
           <Route path="/perfil" element={<UserProfile />} />
-
-
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>

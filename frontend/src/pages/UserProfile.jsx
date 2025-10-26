@@ -1,12 +1,10 @@
-// src/pages/UserProfile.jsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styles from "./UserProfile.module.css";
 import fetcher from "../utils/fetcher";
-import { motion } from "framer-motion";
+import { motion } from 'framer-motion'
 import {
-  FaUser,
   FaIdBadge,
   FaCalendarAlt,
   FaCog,
@@ -171,7 +169,7 @@ export default function UserProfile() {
 
           {/* Informações da Conta */}
           <div className={styles.infoSection}>
-            <h3>
+            <h3 className={styles.iconTitle}>
               <FaIdBadge className={styles.icon} /> Informações da Conta
             </h3>
             <div className={styles.infoItem}>
@@ -186,45 +184,6 @@ export default function UserProfile() {
                 {new Date(user.created_at).toLocaleDateString()}
               </span>
             </div>
-          </div>
-
-          {/* Preferências e Privacidade */}
-          <div className={styles.prefSection}>
-            <h3>
-              <FaCog className={styles.icon} /> Preferências
-            </h3>
-            <div className={styles.prefItem}>
-              <FaBell /> Notificações
-              <label className={styles.switch}>
-                <input
-                  type="checkbox"
-                  checked={preferences.notifications}
-                  onChange={() => handlePrefChange("notifications")}
-                />
-                <span className={styles.slider}></span>
-              </label>
-            </div>
-            <div className={styles.prefItem}>
-              <FaLock /> Conta Privada
-              <label className={styles.switch}>
-                <input
-                  type="checkbox"
-                  checked={preferences.privacy}
-                  onChange={() => handlePrefChange("privacy")}
-                />
-                <span className={styles.slider}></span>
-              </label>
-            </div>
-          </div>
-
-          {/* Tema */}
-          <div className={styles.themeSection}>
-            <h3>
-              {theme === "dark" ? <FaMoon /> : <FaSun />} Tema do site
-            </h3>
-            <button className={styles.themeButton} onClick={toggleTheme}>
-              Alternar para {theme === "dark" ? "claro" : "escuro"}
-            </button>
           </div>
 
           {message && <div className={styles.message}>{message}</div>}
