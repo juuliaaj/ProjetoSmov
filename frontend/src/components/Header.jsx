@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import React, { useState } from "react";
+import { useState } from "react";
 import Logo from './Logo';
+import {FaUserCircle } from 'react-icons/fa';
 
 import styles from './Header.module.css';
 
-const Header = ({ isLoggedIn }) => {
+const Header = ({ permissions }) => {
     const [menuOpen, setMenuOpen] = useState(false);
 
     const toggleMenu = () => {
@@ -24,15 +25,20 @@ const Header = ({ isLoggedIn }) => {
                     <li><Link to="/">Início</Link></li>
                     <li><a href="/mapeamento">Mapeamento</a></li>
 
-                    {isLoggedIn && (
+                    {permissions?.admin && (
+                        <li><a href="/admin">Administração</a></li>
+                    )}
+
+                    {permissions?.loggedIn && (
                         <>
                             <li><a href="/reservas">Reservas</a></li>
                             <li><a href="/ongs">ONGs</a></li>
                             <li><a href="/doacoes">Doações</a></li>
+                            <li><a href="/perfil-ong"><FaUserCircle style={{ color: 'inherit', fontSize: '1.5rem' }} /></a></li>
                         </>
                     )}
 
-                    {!isLoggedIn && (
+                    {!permissions?.loggedIn && (
                         <li><a href="/login">Entrar ou Cadastrar</a></li>
                     )}
                 </ul>

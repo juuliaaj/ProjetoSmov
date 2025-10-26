@@ -2,10 +2,10 @@ const supabase = require('../utils/supabase.js');
 const Reserva = require('../models/Reserva.js');
 
 exports.getInstituicoes = async (req, res, next) => {
-    const { date, cidade } = req.query;
+    const { date, cidade, id_ong } = req.query;
 
-    if (!date || !cidade) {
-        return res.status(400).json({ error: "Parâmetros 'data' e 'cidade' são obrigatórios" });
+    if (!date) {
+        return res.status(400).json({ error: "Data não informada" });
     }
 
     try {
@@ -20,7 +20,7 @@ exports.getInstituicoes = async (req, res, next) => {
 
         const dia_semana = parsedDate.getDay();
 
-        const { data, error } = await supabase
+        const query = supabase
             .from('instituicoes')
             .select(`
                 id_instituicao,
@@ -37,8 +37,17 @@ exports.getInstituicoes = async (req, res, next) => {
             `)
             .eq('status', 'A')
             .eq('instituicoes_horarios.status', 'A')
-            .eq('instituicoes_enderecos.id_cidade', cidade)
             .eq('instituicoes_horarios.dia_semana', dia_semana);
+
+        if (cidade) {
+            query.eq('instituicoes_enderecos.id_cidade', cidade);
+        }
+
+        if (id_ong) {
+            query.eq('id_instituicao', id_ong);
+        }
+
+        const { data, error } = await query;
 
         if (error) throw error;
 
@@ -67,7 +76,7 @@ exports.getReservas = async (req, res, next) => {
 
     const dataFormatada = data.map(reserva => ({
         ...reserva,
-        data: reserva.data ? new Date(reserva.data).toLocaleString('pt-BR', { hour12: false }).replace(',', ' ') : null
+        data: reserva.data ? new Date(reserva.data).toLocaleString('pt-BR', { hour12: false, dateStyle: 'short', timeStyle: 'short' }).replace(',', ' ') : null
     }));
 
     if (error) {

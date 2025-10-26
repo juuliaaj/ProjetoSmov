@@ -10,7 +10,7 @@ const DonationPage = () => {
 
     return (
         <div className={styles.donationPage}>
-           <Header isLoggedIn={permissions?.loggedIn} />
+           <Header permissions={permissions} />
 
             <section className={styles.hero}>
                 <div className={styles.hero_image}>

@@ -3,6 +3,8 @@ import styles from "./HomeInicial.module.css";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
+import { Link } from "react-router-dom";
+import fetcher from "../utils/fetcher";
 
 const HomeInicial = () => {
   const images = useMemo (() => [
@@ -12,6 +14,7 @@ const HomeInicial = () => {
   ], []);
 
   const [permissions] = usePermissions();
+  const [cadastroStatus, setCadastroStatus] = useState('N');
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeSlide, setActiveSlide] = useState({
     main: images[0],
@@ -53,9 +56,27 @@ const HomeInicial = () => {
     }
   }, [currentSlide, images, nextSlide, setActiveSlide]);
 
+  useEffect(() => {
+    if (!permissions?.loggedIn) return;
+
+    fetcher.get('/instituicoes/cadastroStatus')
+      .then(response => {
+        if (response.data && response.data.data) {
+          setCadastroStatus(response.data.data.status);
+        } else {
+          setCadastroStatus(null);
+        }
+      })
+      .catch(error => {
+        console.error("Erro ao verificar status do cadastro da ONG:", error);
+
+        setCadastroStatus(null);
+      });
+  }, [permissions?.loggedIn]);
+
   return (
     <div className={styles.homeInicial}>
-      <Header isLoggedIn={permissions?.loggedIn} />
+      <Header permissions={permissions} />
 
       <section className={styles.hero}>
         <div id="main-background" className={styles.hero_bg} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.main}')` }}></div>
@@ -71,11 +92,26 @@ const HomeInicial = () => {
         </div>
       </section>
 
-      {permissions?.loggedIn && (
+      {permissions?.loggedIn && !cadastroStatus ? (
         <div style={{ textAlign: "center", margin: "40px 0" }}>
-          <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
+          <Link to="/cadastro">
+            <button className={styles.botaoCadastroOng}>Quero cadastrar minha ONG</button>
+          </Link>
+          
         </div>
-      )}
+      ) : cadastroStatus === 'A' ? (
+        <div style={{ textAlign: "center", margin: "40px 0" }}>
+          <span className={`${styles.statusCadastroOng} ${styles.cadastroAndamento}`}>Seu cadastro de ONG está em análise. Em breve traremos novidades!</span>
+        </div>
+      ) : cadastroStatus === 'R' ? (
+        <div style={{ textAlign: "center", margin: "40px 0" }}>
+          <span className={`${styles.statusCadastroOng} ${styles.cadastroRecusado}`}>Infelizmente, seu cadastro de ONG foi recusado. Para mais informações, entre em contato conosco.</span>
+        </div>
+      ) : cadastroStatus === 'F' ? (
+        <div style={{ textAlign: "center", margin: "40px 0" }}>
+          <span className={`${styles.statusCadastroOng}`}>Seu cadastro de ONG foi aprovado! Agora você pode gerenciar sua organização.</span>
+        </div>
+      ) : null}
 
       <section className={styles.sobre}>
         <h2>Conheça o SMOV</h2>

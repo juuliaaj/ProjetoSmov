@@ -128,20 +128,27 @@
   border: none;
   width: 100%;
   font-size: 16px;
-  cursor: pointer;
 }
 
-.grid button:hover {
-  background-color: #c9302c;
-}
-
-.botaoCadastroOng {
+.botaoCadastroOng,
+.statusCadastroOng {
   background-color: #28a745;
   color: white;
   padding: 14px 24px;
   font-size: 18px;
   border: none;
   border-radius: 8px;
+}
+
+.statusCadastroOng.cadastroRecusado {
+  background-color: #dc3545;
+}
+
+.statusCadastroOng.cadastroAndamento {
+  background-color: #f1c501;
+}
+
+.botaoCadastroOng {
   cursor: pointer;
   transition: background-color 0.3s;
 }
@@ -155,7 +162,7 @@
   justify-content: space-around;
   padding: 30px 20px;
   background-color: #1c1c1c;
-  gap: 90px;
+  gap: 20px;
   flex-wrap: wrap;
 }
 

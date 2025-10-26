@@ -6,8 +6,11 @@ import Mapeamento from './pages/Mapeamento';
 import ReservationPage from './pages/ReservationPage';
 import RecoverPassword from './pages/RecoverPassword';
 import ResetPassword from './pages/ResetPassword';
+import OngRegisterPage from './pages/OngRegisterPage';
+import AdminDashboard from "./pages/AdminDashboard";
 import ONGsPage from './pages/ONGsPage';
 import UserProfile from './pages/UserProfile';
+import PerfilOng from './pages/OngsProfile';
 
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -33,7 +36,10 @@ function App() {
           <Route path="/mapeamento" element={<Mapeamento />} />
           <Route path="/reservas" element={<ReservationPage />} />
           <Route path="/ongs" element={<ONGsPage />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/cadastro" element={<OngRegisterPage />} />
           <Route path="/perfil" element={<UserProfile />} />
+          <Route path="/perfil-ong" element={<PerfilOng />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
