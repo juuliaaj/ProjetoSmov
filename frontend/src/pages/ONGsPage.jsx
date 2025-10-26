@@ -72,7 +72,7 @@ export default function ONGsPage() {
 
   return (
     <div className={styles.container}>
-      <Header isLoggedIn={permissions?.loggedIn} />
+      <Header permissions={permissions} />
 
       <main className={styles.main}>
         <div className={styles.searchSection}>

@@ -12,7 +12,7 @@
 
 .heroSection {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 4rem 2rem;
+  padding: 2rem 2rem 6rem;
   text-align: center;
 }
 
@@ -96,7 +96,7 @@
   background-color: #4d4d4d;
   margin: 0 -1rem;
   position: relative;
-  top: -1.75rem;
+  top: -1rem;
   z-index: 1;
 }
 
@@ -303,7 +303,6 @@
   padding: 2rem;
   border-radius: 0.5rem;
   text-align: center;
-  margin: 2rem 0;
 }
 
 .successMessage {
@@ -436,7 +435,7 @@
 
 @media (max-width: 480px) {
   .heroSection {
-    padding: 2rem 1rem;
+    padding: 2rem 1rem 4rem;
   }
 
   .title {

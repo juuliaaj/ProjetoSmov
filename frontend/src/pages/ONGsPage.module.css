@@ -162,6 +162,8 @@
   overflow: hidden;
   transition: all 0.3s;
   cursor: pointer;
+  display: flex;
+  flex-direction: column;
 }
 
 .ongCard:hover {
@@ -200,7 +202,10 @@
 }
 
 .ongInfo {
-  padding: 1.5rem;
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   background-color: rgba(0, 0, 0, 0.3);
 }
 
@@ -211,6 +216,7 @@
   text-align: center;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   padding-bottom: 0.5rem;
+  flex: 1;
 }
 
 .ongLocation {

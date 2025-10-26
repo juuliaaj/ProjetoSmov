@@ -2,7 +2,7 @@ import fetcher from "../utils/fetcher";
 import { useEffect, useState } from "react";
 
 export default function usePermissions() {
-    const [data, setData] = useState({ loggedIn: false });    
+    const [data, setData] = useState(null);    
 
     useEffect(() => {
         fetcher.get('/auth/me')

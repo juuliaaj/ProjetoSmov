@@ -22,6 +22,7 @@ import { TOAST_CONFIG } from "../utils/toast";
 import SelectCidades from "../components/SelectCidades";
 import fetcher from "../utils/fetcher";
 import { useRef } from "react";
+import { useSearchParams } from "react-router-dom";
 
 const RESERVATION_STATUS = {
     P: {
@@ -48,10 +49,13 @@ const RESERVATION_STATUS = {
 
 const ReservationPage = () => {
     const [permissions] = usePermissions();
+
+    const [searchParams] = useSearchParams();
     
     const [filters, setFilters] = useState({
         cidade: "",
         date: "",
+        id_ong: null,
     });
 
     const [loading, setLoading] = useState(false);
@@ -64,6 +68,8 @@ const ReservationPage = () => {
     const [selectedSlot, setSelectedSlot] = useState({});
 
     const [reservations, setReservations] = useState([]);
+
+    const [selectedOng, setSelectedOng] = useState(null);
 
     const searchTimer = useRef(null);
 
@@ -82,7 +88,7 @@ const ReservationPage = () => {
         setErrorMessage("");
         setAvailableSlots([]);
 
-        fetcher.get('/instituicoes/reservar', { params: { cidade: filters.cidade, date: filters.date } })
+        fetcher.get('/instituicoes/reservar', { params: { cidade: filters.cidade, date: filters.date, id_ong: filters.id_ong } })
             .then(response => {
                 let slots = response.data.data || [];
 
@@ -105,7 +111,7 @@ const ReservationPage = () => {
             .finally(() => {
                 setLoading(false);
             });
-    }, [filters.cidade, filters.date]);
+    }, [filters.cidade, filters.date, filters.id_ong]);
 
     const getReservations = useCallback(async () => {
         fetcher.get('/reservas')
@@ -164,7 +170,7 @@ const ReservationPage = () => {
             clearTimeout(searchTimer.current);
         }
 
-        if (filters.cidade && filters.date) {
+        if ((filters.cidade || filters.id_ong) && filters.date) {
             searchTimer.current = setTimeout(() => {
                 getInstituicoes();
             }, 500);
@@ -172,7 +178,7 @@ const ReservationPage = () => {
             setAvailableSlots([]);
             setSearched(false);
         }
-    }, [filters.cidade, filters.date, getInstituicoes]);
+    }, [filters.cidade, filters.date, filters.id_ong, getInstituicoes]);
 
     useEffect(() => {
         if (!confirmationOpen) {
@@ -184,17 +190,48 @@ const ReservationPage = () => {
         getReservations();
     }, [getReservations]);
 
+    useEffect(() => {
+        if (!searchParams) return;
+
+        const newFilters = {};
+
+        const idOng = searchParams.get('id_ong');
+
+        if (idOng) {
+            newFilters.id_ong = idOng;
+        }
+
+        if (!Object.keys(newFilters).length) return;
+
+        setFilters((prev) => ({ ...prev, ...newFilters }));        
+    }, [searchParams]);
+
+    useEffect(() => {
+        if (!filters.id_ong) return;
+
+        fetcher.get('/instituicoes', { params: { id: filters.id_ong } })
+            .then((response) => {
+                if (!response || !response.data) return;
+
+                const data = response.data.data;
+
+                if (!data || !data.length) return;
+
+                setSelectedOng(data[0]);
+            });
+    }, [filters.id_ong]);
+
     return (
         <div className={styles.reservationPage}>
-           <Header isLoggedIn={permissions?.loggedIn} />
+           <Header permissions={permissions} />
 
             <main>
                 <section className={styles.section}>
                     <h1><FaCalendarAlt /> Nova Reserva</h1>
-                    <p className={styles.subtitle}>Reserve agora uma visita a uma de nossas ONGs parceiras!</p>
+                    <p className={styles.subtitle}>Reserve agora uma visita { selectedOng ? 'à ONG ' + selectedOng.nome : 'a uma de nossas ONGs parceiras' }!</p>
 
                     <div className={styles.inputContainer}>
-                        <SelectCidades onChange={onChangeCidade} />
+                        { !filters.id_ong && <SelectCidades onChange={onChangeCidade} /> }
                         <input type="date" name="reservationDate" id="reservationDate" className={styles.datePicker} onChange={(e) => setFilters({ ...filters, date: e.target.value })} value={filters.date} />
                     </div>
 
@@ -217,7 +254,7 @@ const ReservationPage = () => {
                     )}
                 </section>
 
-                {reservations.length > 0 && (
+                {reservations.length > 0 && !filters.id_ong && (
                     <section className={styles.section}>
                         <h1><FaCheck /> Minhas Reservas</h1>
 

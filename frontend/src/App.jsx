@@ -9,6 +9,7 @@ import ResetPassword from './pages/ResetPassword';
 import OngRegisterPage from './pages/OngRegisterPage';
 import AdminDashboard from "./pages/AdminDashboard";
 import ONGsPage from './pages/ONGsPage';
+import PerfilOng from './pages/OngsProfile';
 
 import { createTheme, ThemeProvider, CssBaseline } from '@mui/material';
 import { LocalizationProvider } from '@mui/x-date-pickers';
@@ -36,6 +37,7 @@ function App() {
           <Route path="/cadastro" element={<OngRegisterPage />} />
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/ongs" element={<ONGsPage />} />
+          <Route path="/perfil-ong" element={<PerfilOng />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>
