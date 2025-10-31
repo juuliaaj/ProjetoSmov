@@ -4,7 +4,6 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
 
-// 🆕 Importando os ícones da biblioteca Lucide
 import { User, Search, Calendar, CreditCard, MapPin, CheckCircle, Laptop, Globe } from "lucide-react";
 
 const HomeInicial = () => {
@@ -156,4 +155,3 @@ const HomeInicial = () => {
 };
 
 export default HomeInicial;
-
