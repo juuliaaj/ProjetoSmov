@@ -6,8 +6,10 @@ import usePermissions from "../hooks/usePermissions";
 import { Link } from "react-router-dom";
 import fetcher from "../utils/fetcher";
 
+import { User, Search, Calendar, CreditCard, MapPin, CheckCircle, Laptop, Globe } from "lucide-react";
+
 const HomeInicial = () => {
-  const images = useMemo (() => [
+  const images = useMemo(() => [
     "/img/doacao.jpg",
     "/img/educacao.jpg",
     "/img/banner.jpg"
@@ -31,7 +33,7 @@ const HomeInicial = () => {
 
   useEffect(() => {
     const timeout = setTimeout(() => {
-        nextSlide();
+      nextSlide();
     }, 5000);
 
     setActiveSlide((prev) => ({
@@ -46,14 +48,13 @@ const HomeInicial = () => {
         ...prev,
         main: prev.alt,
       }));
-
       document.getElementById("alt-background").style.opacity = 0;
     }, 1000);
 
     return () => {
-        clearTimeout(timeout);
-        clearTimeout(fadeTimeout);
-    }
+      clearTimeout(timeout);
+      clearTimeout(fadeTimeout);
+    };
   }, [currentSlide, images, nextSlide, setActiveSlide]);
 
   useEffect(() => {
@@ -79,8 +80,22 @@ const HomeInicial = () => {
       <Header permissions={permissions} />
 
       <section className={styles.hero}>
-        <div id="main-background" className={styles.hero_bg} style={{ backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.main}')` }}></div>
-        <div id="alt-background" className={styles.hero_bg} style={{ opacity: 0, backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.alt}')` }}></div>
+        <div
+          id="main-background"
+          className={styles.hero_bg}
+          style={{
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.main}')`,
+          }}
+        ></div>
+        <div
+          id="alt-background"
+          className={styles.hero_bg}
+          style={{
+            opacity: 0,
+            backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('${activeSlide.alt}')`,
+          }}
+        ></div>
+
         <div className={styles.hero_content}>
           <h1>
             Bem-vindo ao <br />
@@ -128,26 +143,26 @@ const HomeInicial = () => {
       </section>
 
       <section className={styles.beneficios}>
-  <div className={styles.cardBeneficio}>
-    <h3>👤 Para Voluntários</h3>
-    <p>Encontre ONGs verificadas, leia suas missões e contribua de forma segura e efetiva.</p>
-    <ul>
-      <li>🔍 Busca Inteligente por Localização</li>
-      <li>📅 Sistema de Reservas</li>
-      <li>💳 Doações Seguras</li>
-    </ul>
-  </div>
+        <div className={styles.cardBeneficio}>
+          <h3><User size={22} /> Para Voluntários</h3>
+          <p>Encontre ONGs verificadas, leia suas missões e contribua de forma segura e efetiva.</p>
+          <ul>
+            <li><Search size={18} /> Busca Inteligente por Localização</li>
+            <li><Calendar size={18} /> Sistema de Reservas</li>
+            <li><CreditCard size={18} /> Doações Seguras</li>
+          </ul>
+        </div>
 
-  <div className={styles.cardBeneficio}>
-    <h3>📍 Para ONGs</h3>
-    <p>Aumente a visibilidade e desfrute de ferramentas para conectar-se com voluntários</p>
-    <ul>
-      <li>✅ Verificação Confiável</li>
-      <li>🧑‍💻 Gestão de Voluntário</li>
-      <li>🌍 Visibilidade Nacional</li>
-    </ul>
-  </div>
-</section>
+        <div className={styles.cardBeneficio}>
+          <h3><MapPin size={22} /> Para ONGs</h3>
+          <p>Aumente a visibilidade e desfrute de ferramentas para conectar-se com voluntários</p>
+          <ul>
+            <li><CheckCircle size={18} /> Verificação Confiável</li>
+            <li><Laptop size={18} /> Gestão de Voluntário</li>
+            <li><Globe size={18} /> Visibilidade Nacional</li>
+          </ul>
+        </div>
+      </section>
 
       <section className={styles.apoie_ongs}>
         <div className={styles.grid}>
