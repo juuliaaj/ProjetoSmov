@@ -1,13 +1,21 @@
 const supabase = require('../utils/supabase.js');
 
 exports.get = async (req, res, next) => {
-    const { id, search, id_cidade, id_categoria, status = 'A' } = req.query;
+    let { id, search, id_cidade, id_categoria, verificadas, status = 'A', isProfile } = req.query;
+
+    if (isProfile == '1' && !id && !req.user.id_instituicao) {
+        res.status(400).json({ error: "ONG não informada." });
+        return;
+    } else if (isProfile == '1' && !id) {
+        id = req.user.id_instituicao;
+    }
 
     try {
         const query = supabase.from('instituicoes').select(`
             *,
             instituicoes_categorias!${id_categoria ? 'inner' : 'left'} (
                 categorias!inner (
+                    id_categoria,
                     nome
                 )
             ),
@@ -22,6 +30,12 @@ exports.get = async (req, res, next) => {
                 cidades!inner (
                     nome
                 )
+            ),
+            instituicoes_horarios (
+                dia_semana,
+                horario_inicial,
+                horario_final,
+                status
             )
         `);
 
@@ -35,8 +49,6 @@ exports.get = async (req, res, next) => {
 
         if (search) {
             query.ilike('nome', `%${search}%`);
-            query.or(`instituicoes_enderecos.rua.ilike.%${search}%, instituicoes_enderecos.bairro.ilike.%${search}%`);
-            query.or(`instituicoes_enderecos.cep.ilike.%${search}%, instituicoes_enderecos.cidades.nome.ilike.%${search}%`);
         }
 
         if (id_cidade) {
@@ -45,6 +57,12 @@ exports.get = async (req, res, next) => {
 
         if (id_categoria) {
             query.eq('instituicoes_categorias.id_categoria', parseInt(id_categoria));
+        }
+
+        if (verificadas == '1') {
+            query.not('id_usuario', 'is', null);
+        } else if (verificadas == '0') {
+            query.is('id_usuario', null);
         }
 
         const { data, error } = await query;
@@ -71,7 +89,8 @@ exports.getEnderecos = async (req, res, next) => {
                     email,
                     logo_url,
                     banner_url,
-                    site
+                    site,
+                    id_usuario
                 ),
                 cidades!inner (
                     nome
@@ -106,6 +125,114 @@ exports.post = async (req, res, next) => {
     } catch (error) {
         console.error("Erro ao criar instituição:", error);
         res.status(500).json({ error: "Erro ao criar instituição" });
+    }
+}
+
+exports.put = async (req, res, next) => {
+    try {
+        let {
+            id_instituicao,
+            data_fundacao,
+            descricao,
+            id_categoria,
+            site,
+            email,
+            telefone,
+            logo_url,
+            banner_url,
+            chave_pix,
+            horarios,
+        } = req.body;
+
+        let parsedHorarios = [];
+
+        if (Object.keys(horarios).length > 0) {
+            parsedHorarios = Object.keys(horarios)
+                .map((h) => ({ ...horarios[h], id_instituicao: id_instituicao, status: 'A' }))
+                .filter((h) => !!h.horario_inicial && !!h.horario_final && h.dia_semana >=0 && h.dia_semana <= 6);
+        }
+
+        if (!id_instituicao) return res.status(404).json({ error: 'Instituição não informada.' });
+
+        if (!id_categoria) return res.status(404).json({ error: 'Categoria é obrigatória.' });
+
+        if (data_fundacao) {
+            const [dia, mes, ano] = data_fundacao.split("/");
+
+            data_fundacao = `${ano}-${mes}-${dia}`;
+        }
+
+        let editFields = {
+            data_fundacao: data_fundacao || null,
+            descricao,
+            site,
+            email,
+            telefone,
+            chave_pix
+        };
+
+        if (logo_url) {
+            editFields.logo_url = logo_url;
+        }
+
+        if (banner_url) {
+            editFields.banner_url = banner_url;
+        }
+
+        const { error } = await supabase
+            .from('instituicoes')
+            .update(editFields)
+            .eq('id_instituicao', id_instituicao);
+
+        if (error) return res.status(500).json({ error: 'Erro ao atualizar instituição.' });
+
+        const { data: categoriaData, error: categoriaErro } = await supabase
+            .from('instituicoes_categorias')
+            .select('id_categoria')
+            .eq('id_instituicao', id_instituicao)
+            .limit(1)
+            .single();
+
+        if (categoriaErro) return res.status(500).json({ error: 'Erro ao buscar categoria.' });
+
+        if (categoriaData.id_categoria != id_categoria) {
+            const { error: deleteError } = await supabase
+                .from('instituicoes_categorias')
+                .delete()
+                .eq('id_instituicao', id_instituicao);
+
+            if (deleteError) return res.status(500).json({ error: 'Erro ao remover categoria.' });
+
+            const { error: insertError } = await supabase
+                .from('instituicoes_categorias')
+                .insert([{
+                    id_instituicao: id_instituicao,
+                    id_categoria: id_categoria,
+                }]);
+
+            if (insertError) return res.status(500).json({ error: 'Erro ao adicionar categoria.' });
+        }
+
+        if (parsedHorarios.length > 0) {
+            const { error: deleteError } = await supabase
+                .from('instituicoes_horarios')
+                .delete()
+                .eq('id_instituicao', id_instituicao);
+
+            if (deleteError) return res.status(500).json({ error: 'Erro ao remover horários.' });
+
+            const { error: insertError } = await supabase
+                .from('instituicoes_horarios')
+                .insert(parsedHorarios);
+
+            console.log(insertError)
+
+            if (insertError) return res.status(500).json({ error: 'Erro ao adicionar horários.' });
+        }
+
+        res.sendStatus(204);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro interno.' });
     }
 }
 
@@ -216,6 +343,7 @@ exports.updateCadastroStatus = async (req, res, next) => {
             logo_url: data.logo_url,
             banner_url: data.banner_url,
             chave_pix: data.chave_pix,
+            id_cadastro: data.id_cadastro,
         }]).select().single();
 
         if (instituicaoError) throw instituicaoError;
@@ -229,7 +357,9 @@ exports.updateCadastroStatus = async (req, res, next) => {
             numero: data.endereco_numero,
             complemento: data.endereco_complemento,
             bairro: data.bairro,
-            cep: data.cep
+            cep: data.cep,
+            latitude: data.latitude,
+            longitude: data.longitude,
         }]);
 
         if (enderecoError) throw enderecoError;

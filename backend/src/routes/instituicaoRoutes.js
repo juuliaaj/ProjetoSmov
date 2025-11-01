@@ -5,6 +5,7 @@ const reservaController = require("../controllers/reservaController.js");
 const instituicaoController = require("../controllers/instituicaoController.js");
 
 router.get("/", instituicaoController.get);
+router.put("/", instituicaoController.put);
 router.post("/", instituicaoController.post);
 router.get("/enderecos", instituicaoController.getEnderecos);
 router.get("/cadastros", instituicaoController.getCadastros);

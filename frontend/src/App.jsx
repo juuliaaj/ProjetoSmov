@@ -39,7 +39,9 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/cadastro" element={<OngRegisterPage />} />
           <Route path="/perfil" element={<UserProfile />} />
+          <Route path="/perfil/:id" element={<UserProfile />} />
           <Route path="/perfil-ong" element={<PerfilOng />} />
+          <Route path="/perfil-ong/:id" element={<PerfilOng />} />
 
           {/* <Route path="*" element={<NotFound />} /> */}
         </Routes>

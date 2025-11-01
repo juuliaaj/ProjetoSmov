@@ -180,6 +180,9 @@
 .cardBeneficio h3 {
   font-size: 40px;
   margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .cardBeneficio p {

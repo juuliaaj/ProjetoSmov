@@ -59,7 +59,7 @@ exports.getInstituicoes = async (req, res, next) => {
 }
 
 exports.getReservas = async (req, res, next) => {
-    const { data, error } = await supabase
+    const query = supabase
         .from('reservas')
         .select(`
             id,
@@ -67,12 +67,24 @@ exports.getReservas = async (req, res, next) => {
             data,
             status,
             descricao,
+            id_usuario,
             instituicoes!inner (
+                nome
+            ),
+            usuarios!inner (
                 nome
             )
         `)
-        .eq('id_usuario', req.user.id_usuario)
-        .order('data', { ascending: false });
+
+        if (!!req.user.id_instituicao) {
+            query.eq('id_instituicao', req.user.id_instituicao)
+        } else {
+            query.eq('id_usuario', req.user.id_usuario)
+        }
+
+        query.order('data', { ascending: false });
+
+        const { data, error } = await query;
 
     const dataFormatada = data.map(reserva => ({
         ...reserva,
@@ -190,7 +202,7 @@ exports.cancelarReserva = async (req, res, next) => {
     try {
         const { error: updateError } = await supabase
             .from('reservas')
-            .update({ status: 'C', descricao: 'Cancelada pelo usuário' })
+            .update({ status: 'C' })
             .eq('id', id);
 
         if (updateError) {
@@ -204,4 +216,52 @@ exports.cancelarReserva = async (req, res, next) => {
         res.status(500).json({ error: "Erro ao processar cancelamento" });
     }
 }
-        
+
+exports.alterarStatusReserva = async (req, res, next) => {
+    const { id, status } = req.params;
+
+    if (!id) {
+        return res.status(400).json({ error: "Reserva não informada" });
+    }
+    
+    if (!status) {
+        return res.status(400).json({ error: "Status não informado" });
+    }
+    
+    if (!['R', 'A', 'F'].includes(status)) {
+        return res.status(400).json({ error: `Status [${status}] inválido.` });
+    }
+
+    const { data: reservaData, error: reservaError } = await supabase
+        .from('reservas')
+        .select('*')
+        .eq('id', id)
+        .eq('id_usuario', req.user.id_usuario)
+        .eq('status', status === 'F' ? 'A' : 'P');
+
+    if (reservaError) {
+        console.error("Erro ao buscar reserva:", reservaError);
+        return res.status(500).json({ error: "Erro ao buscar reserva" });
+    }
+
+    if (!reservaData.length) {
+        return res.status(404).json({ error: "Reserva não encontrada ou não pode ter o status alterado" });
+    }
+
+    try {
+        const { error: updateError } = await supabase
+            .from('reservas')
+            .update({ status })
+            .eq('id', id);
+
+        if (updateError) {
+            console.error("Erro ao alterar o status da reserva:", updateError);
+            return res.status(500).json({ error: "Erro ao alterar o status da reserva" });
+        }
+
+        res.status(200).json({ message: "Reserva atualizada com sucesso" });
+    } catch (error) {
+        console.error("Erro ao processar cancelamento:", error);
+        res.status(500).json({ error: "Erro ao processar alteração" });
+    }
+}

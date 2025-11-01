@@ -144,7 +144,7 @@ const HomeInicial = () => {
 
       <section className={styles.beneficios}>
         <div className={styles.cardBeneficio}>
-          <h3><User size={22} /> Para Voluntários</h3>
+          <h3><User size={42} /> Para Voluntários</h3>
           <p>Encontre ONGs verificadas, leia suas missões e contribua de forma segura e efetiva.</p>
           <ul>
             <li><Search size={18} /> Busca Inteligente por Localização</li>
@@ -154,11 +154,11 @@ const HomeInicial = () => {
         </div>
 
         <div className={styles.cardBeneficio}>
-          <h3><MapPin size={22} /> Para ONGs</h3>
+          <h3><MapPin size={38} /> Para ONGs</h3>
           <p>Aumente a visibilidade e desfrute de ferramentas para conectar-se com voluntários</p>
           <ul>
             <li><CheckCircle size={18} /> Verificação Confiável</li>
-            <li><Laptop size={18} /> Gestão de Voluntário</li>
+            <li><Laptop size={18} /> Gestão de Reservas</li>
             <li><Globe size={18} /> Visibilidade Nacional</li>
           </ul>
         </div>

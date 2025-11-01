@@ -1,4 +1,4 @@
-main {
+.main {
     max-width: 1000px;
     margin: 0 auto;
     padding: 0 20px;
@@ -124,7 +124,8 @@ main {
     min-width: 80px;
 }
 
-.btnCancelarReserva {
+.btnCancelarReserva,
+.btnRecusarReserva {
     background-color: #e74c3c;
     cursor: pointer;
     font-size: 12px;
@@ -134,6 +135,23 @@ main {
     text-align: center;
     color: #fff;
     border: none;
+}
+
+.btnAprovarReserva,
+.btnFinalizarReserva {
+    background-color: #16aa08;
+    cursor: pointer;
+    font-size: 12px;
+    width: 26px;
+    height: 26px;
+    border-radius: 4px;
+    text-align: center;
+    color: #fff;
+    border: none;
+}
+
+.reservationInstitution {
+    text-decoration: none;
 }
 
 @media (max-width: 600px) {

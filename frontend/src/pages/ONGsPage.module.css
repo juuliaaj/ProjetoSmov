@@ -78,12 +78,22 @@
   max-width: 600px;
 }
 
-.searchInput {
+.searchContainer {
   flex: 1;
-  padding: 0.875rem 1.5rem;
+  padding: 0.875rem 1.5rem 0.875rem 1rem;
   background-color: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 8px;
+}
+
+.searchContainer svg {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.searchInput {
+  flex: 1;
+  background: transparent;
+  border: none;
   color: white;
   font-size: 0.95rem;
   outline: none;
@@ -94,7 +104,7 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.searchInput:focus {
+.searchContainer:focus-within {
   background-color: rgba(255, 255, 255, 0.15);
   border-color: #3b82f6;
 }
@@ -133,6 +143,22 @@
   outline: none;
   min-width: 200px;
   transition: all 0.3s;
+  appearance: none;
+}
+
+.selectWrapper {
+  position: relative;
+}
+
+.selectWrapper::after {
+    content: "▼";
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: #fff;
+    font-size: 0.5rem;
 }
 
 .filterSelect:hover {
@@ -175,11 +201,10 @@
 .ongImageContainer {
   width: 100%;
   aspect-ratio: 1;
-  background-color: white;
+  background-color: #727272;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* padding: 2rem; */
 }
 
 .ongImage {

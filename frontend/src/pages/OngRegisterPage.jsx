@@ -14,7 +14,16 @@ import { TOAST_CONFIG } from "../utils/toast";
 import fetcher from '../utils/fetcher';
 import supabase from '../utils/supabase';
 
+import { useJsApiLoader } from "@react-google-maps/api";
+
+const LIBRARIES = ['places'];
+
 export default function OngRegisterPage() {
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
+    libraries: LIBRARIES,
+  });
+
   const [permissions] = usePermissions();
 
   const [categorias, setCategorias] = useState([]);
@@ -79,6 +88,35 @@ export default function OngRegisterPage() {
     return urlData.publicUrl;
   };
 
+  const geocodeAddress = async (address) => {
+    if (!isLoaded) {
+      return null;
+    }
+
+    const geocoder = new window.google.maps.Geocoder();
+    const fullAddress = [
+      address.endereco,
+      address.endereco_numero,
+      address.bairro,
+      address.id_cidade, // will need to map to city name if storing ID
+      address.cep
+    ]
+      .filter(Boolean)
+      .join(", ");
+
+    return new Promise((resolve) => {
+      geocoder.geocode({ address: fullAddress }, (results, status) => {
+        if (status === "OK" && results.length > 0) {
+          const { lat, lng } = results[0].geometry.location;
+          resolve({ lat: lat(), lng: lng() });
+        } else {
+          console.warn("Geocoding failed:", status);
+          resolve(null);
+        }
+      });
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -102,6 +140,19 @@ export default function OngRegisterPage() {
       uploadedUrls.estatuto_url = await uploadFile(files.doc_estatuto, 'documentos');
       uploadedUrls.endereco_url = await uploadFile(files.doc_comprovante_endereco, 'documentos');
       uploadedUrls.responsavel_url = await uploadFile(files.doc_identidade_responsavel, 'documentos');
+
+      const coords = await geocodeAddress({
+        endereco: formData.endereco,
+        endereco_numero: formData.endereco_numero,
+        bairro: formData.bairro,
+        id_cidade: cidades.find(c => c.id_cidade === formData.id_cidade)?.nome, // convert id to city name
+        cep: formData.cep
+      });
+
+      if (coords?.lat && coords?.lng) {
+        formData.latitude = coords.lat;
+        formData.longitude = coords.lng;
+      }
 
       const result = await fetcher.post('/instituicoes', {
         ...formData,
@@ -140,7 +191,7 @@ export default function OngRegisterPage() {
   };
 
   useEffect(() => {
-    if (permissions && !permissions.admin) {
+    if (permissions && permissions.id_instituicao) {
       window.location.href = '/';
     }
   }, [permissions]);

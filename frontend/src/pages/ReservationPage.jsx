@@ -1,6 +1,6 @@
 import styles from "./ReservationPage.module.css";
 import { useCallback, useEffect, useState } from "react";
-import { FaCalendarAlt, FaCheck, FaTrashAlt } from 'react-icons/fa';
+import { FaCalendarAlt, FaCheck, FaTimes, FaTrashAlt } from 'react-icons/fa';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
@@ -22,7 +22,7 @@ import { TOAST_CONFIG } from "../utils/toast";
 import SelectCidades from "../components/SelectCidades";
 import fetcher from "../utils/fetcher";
 import { useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 const RESERVATION_STATUS = {
     P: {
@@ -165,6 +165,18 @@ const ReservationPage = () => {
             });
     }, [cancelReservation, getReservations]);
 
+    const handleStatusReservation = useCallback((id, status) => {
+        fetcher.post(`/reservas/status/${id}/${status}`)
+            .then(() => {
+                toast.success("Reserva atualizada com sucesso!", TOAST_CONFIG);
+                getReservations();
+            })
+            .catch((error) => {
+                console.error(error);
+                toast.error(error?.response?.data?.error || "Erro ao atualizar reserva", TOAST_CONFIG);
+            })
+    }, [getReservations]);
+
     useEffect(() => {
         if (searchTimer.current) {
             clearTimeout(searchTimer.current);
@@ -221,51 +233,66 @@ const ReservationPage = () => {
             });
     }, [filters.id_ong]);
 
+    const isOngAdmin = permissions && !!permissions.id_instituicao;
+
     return (
         <div className={styles.reservationPage}>
            <Header permissions={permissions} />
 
-            <main>
-                <section className={styles.section}>
-                    <h1><FaCalendarAlt /> Nova Reserva</h1>
-                    <p className={styles.subtitle}>Reserve agora uma visita { selectedOng ? 'à ONG ' + selectedOng.nome : 'a uma de nossas ONGs parceiras' }!</p>
-
-                    <div className={styles.inputContainer}>
-                        { !filters.id_ong && <SelectCidades onChange={onChangeCidade} /> }
-                        <input type="date" name="reservationDate" id="reservationDate" className={styles.datePicker} onChange={(e) => setFilters({ ...filters, date: e.target.value })} value={filters.date} />
-                    </div>
-
-                    {(loading && (
-                        <p className={styles.searchInfo}>Buscando horários disponíveis...</p>
-                    )) || (availableSlots.length > 0 && (
-                        <ul className={styles.slotsList}>
-                            {availableSlots.map((slot, index) => (
-                                <li key={index} className={styles.slotItem} onClick={() => openModal(slot)}>
-                                    <span className={styles.slotName}>{slot.nome}</span>
-                                    <span className={styles.slotTime}>{slot.horario_inicial} - {slot.horario_final}</span>
-                                    <span className={styles.slotAddress}>{slot.rua}, {slot.numero} - {slot.bairro}</span>
-                                </li>
-                            ))}
-                        </ul>
-                    )) || (searched && (
-                        <p className={styles.searchInfo}>{errorMessage || "Nenhum horário disponível com os filtros selecionados."}</p>
-                    )) || (
-                        <p className={styles.searchInfo}>Use os filtros acima para buscar horários disponíveis.</p>
-                    )}
-                </section>
-
-                {reservations.length > 0 && !filters.id_ong && (
+            <div className={styles.main}>
+                { !isOngAdmin && (
                     <section className={styles.section}>
-                        <h1><FaCheck /> Minhas Reservas</h1>
+                        <h1><FaCalendarAlt /> Nova Reserva</h1>
+                        <p className={styles.subtitle}>Reserve agora uma visita { selectedOng ? 'à ONG ' + selectedOng.nome : 'a uma de nossas ONGs parceiras' }!</p>
+
+                        <div className={styles.inputContainer}>
+                            { !filters.id_ong && <SelectCidades onChange={onChangeCidade} /> }
+                            <input type="date" name="reservationDate" id="reservationDate" className={styles.datePicker} onChange={(e) => setFilters({ ...filters, date: e.target.value })} value={filters.date} />
+                        </div>
+
+                        {(loading && (
+                            <p className={styles.searchInfo}>Buscando horários disponíveis...</p>
+                        )) || (availableSlots.length > 0 && (
+                            <ul className={styles.slotsList}>
+                                {availableSlots.map((slot, index) => (
+                                    <li key={index} className={styles.slotItem} onClick={() => openModal(slot)}>
+                                        <span className={styles.slotName}>{slot.nome}</span>
+                                        <span className={styles.slotTime}>{slot.horario_inicial} - {slot.horario_final}</span>
+                                        <span className={styles.slotAddress}>{slot.rua}, {slot.numero} - {slot.bairro}</span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )) || (searched && (
+                            <p className={styles.searchInfo}>{errorMessage || "Nenhum horário disponível com os filtros selecionados."}</p>
+                        )) || (
+                            <p className={styles.searchInfo}>Use os filtros acima para buscar horários disponíveis.</p>
+                        )}
+                    </section>
+                ) }
+
+                {((reservations.length > 0 && !filters.id_ong) || isOngAdmin) && (
+                    <section className={styles.section}>
+                        <h1><FaCheck /> {isOngAdmin ? 'Reservas da sua ONG' : 'Minhas Reservas'}</h1>
 
                         <ul className={styles.reservationsList}>
                             {reservations.map((reservation) => (
                                 <li key={reservation.id} className={styles.reservationItem}>
-                                    <span className={styles.reservationInstitution}>{reservation.instituicoes.nome}</span>
+                                    {isOngAdmin ? (
+                                        <Link to={`/perfil?id=${reservation.id_usuario}`} className={styles.reservationInstitution}>{reservation.usuarios.nome}</Link>
+                                    ) : (
+                                        <Link to={`/perfil?id=${reservation.id_usuario}`}  className={styles.reservationInstitution}>{reservation.instituicoes.nome}</Link>
+                                    )}
                                     <span className={styles.reservationDate}>{reservation.data}</span>
                                     <div className={styles.reservationStatusContainer}>
-                                        {['P', 'A'].includes(reservation.status) ? (
+                                        {['P', 'A'].includes(reservation.status) && !isOngAdmin ? (
                                             <button className={styles.btnCancelarReserva} title="Cancelar Reserva" onClick={() => setCancelReservation(reservation.id)}><FaTrashAlt /></button>
+                                        ) : ['P'].includes(reservation.status) && isOngAdmin ? (
+                                            <>
+                                                <button className={styles.btnAprovarReserva} title="Aprovar Reserva" onClick={() => handleStatusReservation(reservation.id, 'A')}><FaCheck /></button>
+                                                <button className={styles.btnRecusarReserva} title="Cancelar Reserva" onClick={() => handleStatusReservation(reservation.id, 'R')}><FaTimes /></button>
+                                            </>
+                                        ) : ['A'].includes(reservation.status) && isOngAdmin ? (
+                                            <button className={styles.btnFinalizarReserva} title="Finalizar Reserva" onClick={() => handleStatusReservation(reservation.id, 'F')}><FaCheck /></button>
                                         ) : null}
 
                                         <span style={{ backgroundColor: RESERVATION_STATUS[reservation.status]?.color || '#7f7f7f' }}>
@@ -277,7 +304,7 @@ const ReservationPage = () => {
                         </ul>
                     </section>
                 )}
-            </main>
+            </div>
             
             <Footer />
 

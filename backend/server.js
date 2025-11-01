@@ -9,6 +9,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 const supabase = require('./src/utils/supabase.js');
+const authRoutes = require("./src/routes/authRoutes.js");
 const userRoutes = require("./src/routes/usuarioRoutes.js");
 const cidadeRoutes = require("./src/routes/cidadeRoutes.js");
 const categoriaRoutes = require("./src/routes/categoriaRoutes.js");
@@ -28,7 +29,7 @@ app.use(cors({
 app.use(async (req, res, next) => {
     const isSessionRoute = req.path === '/auth/me';
 
-    if (req.method === 'OPTIONS' || (req.path.startsWith('/auth') && !isSessionRoute)) {
+    if (req.method === 'OPTIONS' || (req.path.startsWith('/auth') && !isSessionRoute) || req.path === '/instituicoes/enderecos') {
         return next();
     }
 
@@ -54,6 +55,18 @@ app.use(async (req, res, next) => {
         return res.status(200).json({ data: null });
     }
 
+    const { data: ongData } = await supabase
+        .from('instituicoes')
+        .select('id_instituicao')
+        .eq('id_usuario', userData.id_usuario);
+
+    let idOng = null;
+
+    if (ongData && ongData.length > 0) {
+        idOng = ongData[0].id_instituicao;
+        userData.id_instituicao = idOng;
+    }
+
     if (isSessionRoute) {
         return res.status(200).json(
             {
@@ -62,6 +75,7 @@ app.use(async (req, res, next) => {
                     nome: userData.nome,
                     foto_perfil: userData.foto_perfil,
                     admin: userData.admin || false,
+                    id_instituicao: idOng,
                 }
             }
         );
@@ -72,7 +86,8 @@ app.use(async (req, res, next) => {
     next();
 });
 
-app.use("/auth", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/usuarios", userRoutes);
 app.use("/cidades", cidadeRoutes);
 app.use("/categorias", categoriaRoutes);
 app.use("/instituicoes", instituicaoRoutes);

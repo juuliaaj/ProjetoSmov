@@ -4,6 +4,7 @@ import { FaPix } from 'react-icons/fa6';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import usePermissions from "../hooks/usePermissions";
+import { Link } from "react-router-dom";
 
 const DonationPage = () => {
     const [permissions] = usePermissions();
@@ -38,7 +39,7 @@ const DonationPage = () => {
                         <p>Pronto!</p>
                     </div>
                 </div>
-                <button className={styles.botao_ong}>Escolha a ONG</button>
+                <Link to={'/ongs?verificadas=1'} className={styles.botao_ong}>Escolha a ONG</Link>
             </section>
 
             <section className={styles.mensagem}>

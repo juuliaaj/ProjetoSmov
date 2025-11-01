@@ -102,43 +102,39 @@ exports.recuperarSenha = async (req, res) => {
 };
 
 exports.getPerfil = async (req, res) => {
-  try {
-    const sessionId = req.cookies?.smovSessionID;
-    if (!sessionId) return res.status(401).json({ error: 'Usuário não autenticado.' });
+    const { id: idUsuario } = req.query;
 
-    const { data, error } = await supabase
-      .from('usuarios')
-      .select('id_interno, nome, created_at')
-      .eq('id_interno', sessionId)
-      .limit(1);
+    try {
+        const { data, error } = await supabase
+            .from('usuarios')
+            .select('id_usuario, nome, email, telefone, bio, foto_perfil, admin, created_at')
+            .eq('id_usuario', idUsuario ?? req.user.id_usuario)
+            .single();
 
-    if (error) return res.status(500).json({ error: 'Erro ao buscar perfil.' });
-    if (!data || data.length === 0) return res.status(404).json({ error: 'Usuário não encontrado.' });
+        if (error) return res.status(500).json({ error: 'Erro ao buscar perfil.' });
+        if (!data) return res.status(404).json({ error: 'Usuário não encontrado.' });
 
-    res.status(200).json({ data: data[0] });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro interno.' });
-  }
+        res.status(200).json({ data: data });
+    } catch (error) {
+        res.status(500).json({ error: 'Erro interno.' });
+    }
 };
 
 exports.updatePerfil = async (req, res) => {
-  try {
-    const sessionId = req.cookies?.smovSessionID;
-    if (!sessionId) return res.status(401).json({ error: 'Usuário não autenticado.' });
+    try {
+        const { nome, bio, telefone, email, foto_perfil, foto_perfil_path } = req.body;
 
-    const { nome } = req.body;
-    if (!nome) return res.status(400).json({ error: 'Nome é obrigatório.' });
+        if (!nome) return res.status(404).json({ error: 'Nome é obrigatório.' })
 
-    const { data, error } = await supabase
-      .from('usuarios')
-      .update({ nome })
-      .eq('id_interno', sessionId)
-      .select()
-      .limit(1);
+        const { error } = await supabase
+            .from('usuarios')
+            .update({ nome, bio, telefone, email, foto_perfil, foto_perfil_path })
+            .eq('id_usuario', req.user.id_usuario);
 
-    if (error) return res.status(500).json({ error: 'Erro ao atualizar perfil.' });
-    res.status(200).json({ message: 'Perfil atualizado com sucesso.', data: data[0] });
-  } catch (error) {
-    res.status(500).json({ error: 'Erro interno.' });
-  }
+        if (error) return res.status(500).json({ error: 'Erro ao atualizar perfil.' });
+
+        res.sendStatus(204);
+    } catch (error) {
+        res.status(500).json({ error: 'Erro interno.' });
+    }
 };

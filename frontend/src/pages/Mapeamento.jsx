@@ -180,6 +180,7 @@ export default function Mapeamento() {
       }
 
       if (animatedRef.current.voiceSystem) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         animatedRef.current.voiceSystem.synth.cancel();
       }
     };
@@ -226,6 +227,7 @@ export default function Mapeamento() {
               logo_url: r.instituicoes?.logo_url || null,
               banner_url: r.instituicoes?.banner_url || null,
               site: r.instituicoes?.site || null,
+              verificada: !!r.instituicoes?.id_usuario,
               enderecoCompleto: `${r.rua || ''} ${r.numero || ''}${r.complemento ? `, ${r.complemento}` : ''}, ${r.bairro || ''}`.trim()
             }));
 
@@ -654,6 +656,7 @@ export default function Mapeamento() {
   useEffect(() => {
     return () => {
       if (animatedRef.current?.voiceSystem) {
+        // eslint-disable-next-line react-hooks/exhaustive-deps
         animatedRef.current.voiceSystem.synth.cancel();
       }
     };
@@ -676,7 +679,11 @@ export default function Mapeamento() {
   }
 
   function fazerDoacao(id_instituicao) {
-    console.log('Doar para: ' + id_instituicao)
+    if (!id_instituicao || !document || !window) return;
+
+    const url = document.location.origin + '/perfil-ong/' + id_instituicao;
+
+    window.location.href = url;
   }
 
   if (!isLoaded) {
@@ -954,16 +961,18 @@ export default function Mapeamento() {
                     <><Play size={14} /> Iniciar Navegação</>
                   )}
                 </button>
-
-                <button 
-                  className={styles.secondaryBtn} 
-                  onClick={() => fazerDoacao(selected.id_instituicao)}
-                >
-                  <Heart size={14} /> Fazer Doação
-                </button>
-                <button className={styles.ghostBtn} onClick={() => fazerReserva(selected.id_instituicao)}>
-                  <Truck size={14} /> Fazer Reserva
-                </button>
+                
+                {selected.verificada && <>
+                  <button 
+                    className={styles.secondaryBtn} 
+                    onClick={() => fazerDoacao(selected.id_instituicao)}
+                  >
+                    <Heart size={14} /> Fazer Doação
+                  </button>
+                  <button className={styles.ghostBtn} onClick={() => fazerReserva(selected.id_instituicao)}>
+                    <Truck size={14} /> Fazer Reserva
+                  </button>
+                </>}
               </div>
 
               <div className={styles.hint}>
