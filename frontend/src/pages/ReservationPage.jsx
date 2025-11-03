@@ -278,9 +278,9 @@ const ReservationPage = () => {
                             {reservations.map((reservation) => (
                                 <li key={reservation.id} className={styles.reservationItem}>
                                     {isOngAdmin ? (
-                                        <Link to={`/perfil?id=${reservation.id_usuario}`} className={styles.reservationInstitution}>{reservation.usuarios.nome}</Link>
+                                        <Link to={`/perfil/${reservation.id_usuario}`} className={styles.reservationInstitution}>{reservation.usuarios.nome}</Link>
                                     ) : (
-                                        <Link to={`/perfil?id=${reservation.id_usuario}`}  className={styles.reservationInstitution}>{reservation.instituicoes.nome}</Link>
+                                        <Link to={`/perfil-ong/${reservation.id_instituicao}`}  className={styles.reservationInstitution}>{reservation.instituicoes.nome}</Link>
                                     )}
                                     <span className={styles.reservationDate}>{reservation.data}</span>
                                     <div className={styles.reservationStatusContainer}>

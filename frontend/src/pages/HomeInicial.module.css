@@ -203,8 +203,6 @@
   gap: 8px;
 }
 
-
-
 @media (max-width: 768px) {
   .hero_content h1 {
     font-size: 32px;
@@ -217,6 +215,30 @@
   .prev, .next {
     font-size: 20px;
     padding: 6px;
+  }
+
+  .logo {
+    width: 180px;
+  }
+
+  .sobre h2 {
+    font-size: 36px;
+  }
+
+  .sobre p {
+    font-size: 16px;
+  }
+
+  .cardBeneficio h3 {
+    font-size: 26px;
+  }
+
+  .cardBeneficio p {
+    font-size: 14px;
+  }
+
+  .cardBeneficio li {
+    font-size: 12px;
   }
 }
 

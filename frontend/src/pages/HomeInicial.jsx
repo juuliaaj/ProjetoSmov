@@ -168,11 +168,11 @@ const HomeInicial = () => {
         <div className={styles.grid}>
           <div>
             <img src="/img/criancas.jpg" alt="Crianças" />
-            <button>Apoie ONG de Crianças</button>
+            <button>Apoie ONGs de Crianças</button>
           </div>
           <div>
             <img src="/img/animais.jpg" alt="Animais" />
-            <button>Apoie ONG de Animais</button>
+            <button>Apoie ONGs de Animais</button>
           </div>
           <div>
             <img src="/img/ambiental.jpg" alt="Ambiente" />
@@ -180,7 +180,7 @@ const HomeInicial = () => {
           </div>
           <div>
             <img src="/img/saude.jpg" alt="Saúde" />
-            <button>Apoie ONG de Saúde</button>
+            <button>Apoie ONGs de Saúde</button>
           </div>
         </div>
       </section>

@@ -170,5 +170,13 @@
     .subtitle, .searchInfo {
         font-size: 10px;
     }
+
+    .inputContainer {
+        flex-direction: column;
+    }
+
+    .slotsList {
+        grid-template-columns: 1fr;
+    }
 }
 

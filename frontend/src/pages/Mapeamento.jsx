@@ -41,33 +41,46 @@ class NavigationVoice {
   constructor() {
     this.synth = window.speechSynthesis;
     this.voices = [];
+    this.voice = null;
     this.volume = 0.8;
     this.enabled = true;
     this.rate = 0.9;
     this.pitch = 1;
-    this.loadVoices();
+
+    if (this.synth.onvoiceschanged !== undefined) {
+      this.synth.onvoiceschanged = () => this.loadVoices();
+    } else {
+      this.loadVoices();
+    }
   }
 
   loadVoices() {
     this.voices = this.synth.getVoices();
+
+    if (!this.voices.length) return;
+
+    const preferredVoiceNames = [
+      "Google",
+      "Microsoft Maria",
+      "Luciana"
+    ];
+
+    const portugueseVoices = this.voices.filter(v => v.lang.toLowerCase() === 'pt-br');
+
+    for (const voice of preferredVoiceNames) {
+      this.voice = portugueseVoices.find(v => v.name.includes(voice));
+
+      if (this.voice) break
+    }
     
-    const portugueseVoices = this.voices.filter(voice => 
-      voice.lang.includes('pt-BR') || voice.lang.includes('pt-br')
-    );
-    
-    if (portugueseVoices.length > 0) {
-      this.voice = portugueseVoices[0];
-    } else {
-      const anyPortuguese = this.voices.find(voice => 
-        voice.lang.includes('pt') || voice.lang.includes('PT')
-      );
-      this.voice = anyPortuguese || this.voices[0];
+    if (!this.voice) {
+      this.voice = portugueseVoices[0] || this.voices[0];
     }
   }
 
   speak(text, immediate = false) {
     if (!this.enabled || !this.synth) return;
-    
+
     if (immediate) {
       this.synth.cancel();
     }
@@ -78,7 +91,7 @@ class NavigationVoice {
     utterance.rate = this.rate;
     utterance.pitch = this.pitch;
     utterance.lang = 'pt-BR';
-    
+
     setTimeout(() => {
       if (this.enabled) this.synth.speak(utterance);
     }, immediate ? 50 : 0);
@@ -244,7 +257,7 @@ export default function Mapeamento() {
   const filteredOngs = useMemo(() => {
     if (!busca) return ongs;
 
-    const q = busca.toLowerCase();
+    const q = busca.toLowerCase().trim();
 
     return ongs.filter(
       (o) =>
