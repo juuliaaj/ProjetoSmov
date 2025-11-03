@@ -243,7 +243,7 @@ const UserProfile = () => {
               <div className={styles.userProfile__field}>
                 <label htmlFor="email" className={styles.userProfile__fieldLabel}>
                   <Mail className={styles.userProfile__fieldIcon} />
-                  Email
+                  E-mail
                 </label>
                 {isEditing ? (
                   <input

@@ -15,7 +15,7 @@ export default function RecoverPassword() {
     e.preventDefault();
 
     if (!/\S+@\S+\.\S+/.test(email)) {
-      toast.error("Digite um e-mail válido.", TOAST_CONFIG);
+      toast.error("Digite um E-mail válido.", TOAST_CONFIG);
       return;
     }
 
@@ -27,7 +27,7 @@ export default function RecoverPassword() {
 
       if (response.status === 200) {
         toast.update(notify, {
-          render: "Instruções enviadas ao seu e-mail.",
+          render: "Instruções enviadas ao seu E-mail.",
           type: "success",
           isLoading: false,
         });
@@ -60,12 +60,12 @@ export default function RecoverPassword() {
           <Logo />
           <h1 className={styles.title}>Recuperar Senha</h1>
           <p className={styles.text}>
-            Digite seu e-mail para receber as instruções de recuperação de senha.
+            Digite seu E-mail para receber as instruções de recuperação de senha.
           </p>
           <form onSubmit={handleSubmit} className={styles.form}>
             <input
               type="email"
-              placeholder="Seu e-mail"
+              placeholder="Seu E-mail"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required

@@ -304,7 +304,7 @@ export default function OngRegisterPage() {
 
                 <div className={styles.formRow}>
                   <div className={styles.formGroup}>
-                    <label htmlFor="email">Email *</label>
+                    <label htmlFor="email">E-mail *</label>
                     <input
                       type="email"
                       id="email"
@@ -365,7 +365,7 @@ export default function OngRegisterPage() {
                     name="chave_pix"
                     value={formData.chave_pix}
                     onChange={handleInputChange}
-                    placeholder="Email, telefone, CPF/CNPJ ou chave aleatória"
+                    placeholder="E-mail, telefone, CPF/CNPJ ou chave aleatória"
                   />
                 </div>
               </div>

@@ -384,7 +384,7 @@ function OngsProfile() {
                     <Mail className={styles.icon} />
                   </div>
                   <div className={styles.infoContent}>
-                    <span className={styles.infoLabel}>Email</span>
+                    <span className={styles.infoLabel}>E-mail</span>
                     {isEditing ? (
                       <input
                         type="text"

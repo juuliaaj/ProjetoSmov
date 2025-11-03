@@ -902,7 +902,7 @@ export default function Mapeamento() {
 
               {selected.email && (
                 <div className={styles.contactInfo}>
-                  <strong>Email:</strong> {selected.email}
+                  <strong>E-mail:</strong> {selected.email}
                 </div>
               )}
 
