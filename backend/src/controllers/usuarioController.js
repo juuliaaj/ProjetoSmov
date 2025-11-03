@@ -30,10 +30,13 @@ exports.cadastro = async (req, res, next) => {
 
         const usuario = new Usuario(insertData[0].id_usuario, nome, null);
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie('smovSessionID', data.user.id, {
+            ...(isProduction ? { domain: '.projetosmov.com.br' } : {}),
             maxAge: 1000 * 60 * 60 * 24 * 7,
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+            sameSite: "lax",
             secure: process.env.NODE_ENV === "production",
         });
         res.status(201).json({ message: "OK", data: usuario });
@@ -67,11 +70,14 @@ exports.login = async (req, res, next) => {
 
         const usuario = new Usuario(userData[0].id_usuario, userData[0].nome, userData[0].foto_perfil);
 
+        const isProduction = process.env.NODE_ENV === "production";
+
         res.cookie('smovSessionID', data.user.id, {
+            ...(isProduction ? { domain: '.projetosmov.com.br' } : {}),
             maxAge: 1000 * 60 * 60 * 24 * 7,
             httpOnly: true,
-            sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-            secure: process.env.NODE_ENV === "production",
+            sameSite: "lax",
+            secure: isProduction,
         });
         res.status(200).json({ message: "OK", data: usuario });
     } catch (error) {
