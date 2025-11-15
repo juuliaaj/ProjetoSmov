@@ -59,7 +59,7 @@ const AdminDashboard = () => {
   }
 
   function handleSlides(ong) {
-    let docs = [ong.logo_url, ong.banner_url, ong.cnpj_url, ong.endereco_url, ong.estatuto_url, ong.responsavel_url];
+    let docs = [ong.logo_url, ong.banner_url, ong.endereco_url];
 
     docs = docs.reduce((acc, doc, idx) => {
       let title = 'Documento';
@@ -72,16 +72,7 @@ const AdminDashboard = () => {
           title = 'Banner';
           break;
         case 2:
-          title = 'CNPJ da ONG';
-          break;
-        case 3:
           title = 'Comprovante de Endereço';
-          break;
-        case 4:
-          title = 'Estatuto Social';
-          break;
-        case 5:
-          title = 'Documento do Responsável';
           break;
       }
 

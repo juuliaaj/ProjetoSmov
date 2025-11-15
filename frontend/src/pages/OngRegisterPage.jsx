@@ -52,10 +52,7 @@ export default function OngRegisterPage() {
   const [files, setFiles] = useState({
     logo: null,
     banner: null,
-    doc_cnpj: null,
-    doc_estatuto: null,
     doc_comprovante_endereco: null,
-    doc_identidade_responsavel: null
   });
 
   const handleInputChange = (e) => {
@@ -98,7 +95,7 @@ export default function OngRegisterPage() {
       address.endereco,
       address.endereco_numero,
       address.bairro,
-      address.id_cidade, // will need to map to city name if storing ID
+      address.cidade,
       address.cep
     ]
       .filter(Boolean)
@@ -125,7 +122,7 @@ export default function OngRegisterPage() {
     try {
       const uploadedUrls = {};
 
-      if (!files.doc_cnpj || !files.doc_estatuto || !files.doc_comprovante_endereco || !files.doc_identidade_responsavel) {
+      if (!files.doc_comprovante_endereco) {
         return;
       }
 
@@ -136,16 +133,13 @@ export default function OngRegisterPage() {
         uploadedUrls.banner_url = await uploadFile(files.banner, 'fotos');
       }
 
-      uploadedUrls.cnpj_url = await uploadFile(files.doc_cnpj, 'documentos');
-      uploadedUrls.estatuto_url = await uploadFile(files.doc_estatuto, 'documentos');
       uploadedUrls.endereco_url = await uploadFile(files.doc_comprovante_endereco, 'documentos');
-      uploadedUrls.responsavel_url = await uploadFile(files.doc_identidade_responsavel, 'documentos');
 
       const coords = await geocodeAddress({
         endereco: formData.endereco,
         endereco_numero: formData.endereco_numero,
         bairro: formData.bairro,
-        id_cidade: cidades.find(c => c.id_cidade === formData.id_cidade)?.nome, // convert id to city name
+        cidade: cidades.find(c => c.id_cidade === formData.id_cidade)?.nome,
         cep: formData.cep
       });
 
@@ -513,36 +507,6 @@ export default function OngRegisterPage() {
                   <h3>Documentos Obrigatórios</h3>
 
                   <div className={styles.fileUpload}>
-                    <label htmlFor="doc_cnpj" className={styles.required}>
-                      <FileText size={24} />
-                      <span>Documento do CNPJ *</span>
-                      {files.doc_cnpj && <span className={styles.fileName}>{files.doc_cnpj.name}</span>}
-                    </label>
-                    <input
-                      type="file"
-                      id="doc_cnpj"
-                      name="doc_cnpj"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => handleFileChange(e, 'doc_cnpj')}
-                    />
-                  </div>
-
-                  <div className={styles.fileUpload}>
-                    <label htmlFor="doc_estatuto" className={styles.required}>
-                      <FileText size={24} />
-                      <span>Estatuto Social *</span>
-                      {files.doc_estatuto && <span className={styles.fileName}>{files.doc_estatuto.name}</span>}
-                    </label>
-                    <input
-                      type="file"
-                      id="doc_estatuto"
-                      name="doc_estatuto"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => handleFileChange(e, 'doc_estatuto')}
-                    />
-                  </div>
-
-                  <div className={styles.fileUpload}>
                     <label htmlFor="doc_comprovante_endereco" className={styles.required}>
                       <FileText size={24} />
                       <span>Comprovante de Endereço *</span>
@@ -554,21 +518,6 @@ export default function OngRegisterPage() {
                       name="doc_comprovante_endereco"
                       accept=".pdf,.jpg,.jpeg,.png"
                       onChange={(e) => handleFileChange(e, 'doc_comprovante_endereco')}
-                    />
-                  </div>
-
-                  <div className={styles.fileUpload}>
-                    <label htmlFor="doc_identidade_responsavel" className={styles.required}>
-                      <FileText size={24} />
-                      <span>RG/CNH do Responsável *</span>
-                      {files.doc_identidade_responsavel && <span className={styles.fileName}>{files.doc_identidade_responsavel.name}</span>}
-                    </label>
-                    <input
-                      type="file"
-                      id="doc_identidade_responsavel"
-                      name="doc_identidade_responsavel"
-                      accept=".pdf,.jpg,.jpeg,.png"
-                      onChange={(e) => handleFileChange(e, 'doc_identidade_responsavel')}
                     />
                   </div>
                 </div>
@@ -621,7 +570,7 @@ export default function OngRegisterPage() {
                   <button
                     type="submit"
                     className={styles.btnPrimary}
-                    disabled={loading || !files.doc_cnpj || !files.doc_estatuto || !files.doc_comprovante_endereco || !files.doc_identidade_responsavel}
+                    disabled={loading || !files.doc_comprovante_endereco}
                   >
                     {loading ? 'Enviando...' : 'Enviar Cadastro'}
                   </button>
